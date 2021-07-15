@@ -54,9 +54,9 @@ const styles = theme => ({
     },
     inputRoot: {
         color: 'inherit',
-        flexGrow:1,
-        flex:1,
-        flexBasis:'100%',
+        flexGrow: 1,
+        flex: 1,
+        flexBasis: '100%',
     },
     inputInput: {
         width: '30ch',
@@ -79,14 +79,14 @@ const styles = theme => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
-    
-    FormControl:{
-  
-            minWidth: '-webkit-fill-available',
-      
+
+    FormControl: {
+
+        minWidth: '-webkit-fill-available',
+
     }
 
-   
+
 });
 
 const theme = createTheme({
@@ -147,8 +147,8 @@ class Header extends Component {
             passwordRegisterRequired: "dispNone",
             contactNoSignup: "",
             contactNoSignupRequired: "dispNone",
-            isStrongPasswordError: "dispNone"
-
+            isStrongPasswordError: "dispNone",
+            contactNoSignupError: "dispNone"
         }
     }
 
@@ -195,6 +195,7 @@ class Header extends Component {
             contactNoSignupRequired: 'dispNone',
             emailRequired: 'dispNone',
             isvalidEmailError: "dispNone",
+            contactNoSignupError: "dispNone"
 
         })
     }
@@ -217,8 +218,7 @@ class Header extends Component {
         this.state.firstname === "" ? this.setState({ firstnameRequired: 'dispBlock' }) : this.setState({ firstnameRequired: 'dispNone' })
         this.validateEmail();
         this.validatePassword();
-
-        this.state.contactNoSignup === "" ? this.setState({ contactNoSignupRequired: 'dispBlock' }) : this.setState({ contactNoSignupRequired: 'dispNone' })
+        this.validateContactnoSignUp();
 
     }
 
@@ -233,6 +233,12 @@ class Header extends Component {
         let password = this.state.passwordregister;
         password === "" ? this.setState({ passwordRegisterRequired: 'dispBlock' }) : this.setState({ passwordRegisterRequired: 'dispNone' })
         validator.isStrongPassword(password) ? this.setState({ isStrongPasswordError: "dispNone" }) : this.setState({ isStrongPasswordError: "dispBlock" });
+    }
+
+    validateContactnoSignUp = () => {
+        let contactno = this.state.contactNoSignup;
+        contactno === "" ? this.setState({ contactNoSignupRequired: 'dispBlock' }) : this.setState({ contactNoSignupRequired: 'dispNone' })
+        validator.isMobilePhone(contactno) && contactno.length === 10 ? this.setState({ contactNoSignupError: 'dispNone' }) : this.setState({ contactNoSignupError: 'dispBlock' })
     }
 
     firstnameInputChangeHandler = (e) => {
@@ -403,8 +409,21 @@ class Header extends Component {
                                     <Input id="contactNoSignup" type="tel" contactno={this.state.contactNoSignup}
                                         onChange={this.contactNoSignupInputChangeHandler}
                                     />
-                                    <FormHelperText className={this.state.contactNoSignupRequired}>
-                                        <span className="redError">required</span>
+                                    <FormHelperText>
+                                        {
+                                            this.state.contactNoSignupRequired === "dispBlock"
+                                                ?
+                                                <span className="redError">required</span>
+                                                :
+                                                (this.state.contactNoSignupError === 'dispBlock'
+                                                    ?
+                                                    <span className="redError">
+                                                        Contact No. must contain only numbers and must be 10 digits long
+                                                    </span>
+                                                    :
+                                                    null
+                                                )
+                                        }
                                     </FormHelperText>
                                 </FormControl><br /><br />
                                 <Button id="registerButton" variant="contained" color="primary" onClick={this.registerValidationHandler}>Register</Button>
