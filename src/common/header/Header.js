@@ -12,7 +12,11 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
-
+import { Modal } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { Tab } from '@material-ui/core';
+import { Tabs } from '@material-ui/core';
 
 const styles = theme => ({
 
@@ -68,9 +72,58 @@ const theme = createTheme({
     }
 });
 
+//styles for Modal
+const modalStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
+    }
+};
+
+// Tab container inside the modal
+const TabContainer = function (props) {
+    return (
+        <Typography component="div" style={{padding: 0, textAlign: 'center'}}>
+            {props.children}
+        </Typography>
+    )
+}
+
+TabContainer.propTypes = {
+    children: PropTypes.node.isRequired
+}
+
 
 
 class Header extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            isModalOpen: false,
+            value:0,
+        }
+    }
+
+    openModalHandler = () => {
+        this.setState({
+            isModalOpen: true,
+        })
+    }
+
+    tabChangeHandler = (event, value) => {
+        this.setState({value});
+    }
+
+    closeModalHandler =() =>{
+        this.setState({isModalOpen:false})
+        this.setState({value:0})    
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -105,13 +158,26 @@ class Header extends Component {
                         </div>
                         <div className={classes.loginContainer}>
                             <div className={classes.headerLoginBtn}>
-                                <Button variant="contained" color="default" startIcon={<AccountCircle />}>
+                                <Button variant="contained" color="default" startIcon={<AccountCircle />}
+                                    onClick={this.openModalHandler}>
                                     Login
                                 </Button>
                             </div>
                         </div>
                     </Toolbar>
                 </AppBar>
+                <Modal
+                    aria-hidden={false}
+                    open={this.state.isModalOpen}
+                    contentlabel="Login"
+                    onClose={this.closeModalHandler}
+                    style={modalStyles}>
+                     <Tabs className="tabs" value = {this.state.value} onChange={this.tabChangeHandler}>
+                        <Tab label='Login'/>
+                        <Tab label='Register'/>
+                  </Tabs>   
+
+                </Modal>
             </div>
 
         )
