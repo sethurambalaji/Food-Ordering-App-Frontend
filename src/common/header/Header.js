@@ -21,6 +21,7 @@ import { Typography } from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+import validator from 'validator'
 const styles = theme => ({
 
     grow: {
@@ -129,9 +130,9 @@ class Header extends Component {
             firstname: "",
             firstnameRequired: "dispNone",
             lastname: "",
-            lastnameRequired: "dispNone",
             email: "",
             emailRequired: "dispNone",
+            emailError: "dispNone",
             passwordregister: "",
             passwordRegisterRequired: "dispNone",
             contactNoSignup: "",
@@ -176,11 +177,12 @@ class Header extends Component {
             email: "",
             passwordregister: "",
             contactNo: "",
+            contactNoSignup:"",
             firstnameRequired: 'dispNone',
-            lastnameRequired: 'dispNone',
             passwordRegisterRequired: 'dispNone',
-            emailRequired: 'dispNone',
             contactNoSignupRequired: 'dispNone',
+            emailRequired: 'dispNone',
+            emailError: "dispNone",
         })
     }
 
@@ -200,10 +202,18 @@ class Header extends Component {
     registerValidationHandler = () => {
 
         this.state.firstname === "" ? this.setState({ firstnameRequired: 'dispBlock' }) : this.setState({ firstnameRequired: 'dispNone' })
-        this.state.lastname === "" ? this.setState({ lastnameRequired: 'dispBlock' }) : this.setState({ lastnameRequired: 'dispNone' })
-        this.state.email === "" ? this.setState({ emailRequired: 'dispBlock' }) : this.setState({ emailRequired: 'dispNone' })
+        this.validateEmail();
         this.state.passwordregister === "" ? this.setState({ passwordRegisterRequired: 'dispBlock' }) : this.setState({ passwordRegisterRequired: 'dispNone' })
         this.state.contactNoSignup === "" ? this.setState({ contactNoSignupRequired: 'dispBlock' }) : this.setState({ contactNoSignupRequired: 'dispNone' })
+
+    }
+
+
+    validateEmail = () => {
+        let email = this.state.email;
+        email === "" ? this.setState({ emailRequired: 'dispBlock' }) : this.setState({ emailRequired: 'dispNone' })
+       console.log(this.state.emailRequired)
+       validator.isEmail(email)? this.setState({ emailError: "dispNone" }):this.setState({ emailError: "dispBlock" });
     }
 
     firstnameInputChangeHandler = (e) => {
@@ -222,7 +232,7 @@ class Header extends Component {
         this.setState({ passwordregister: e.target.value })
     }
 
-    contactNoInputChangeHandler = (e) => {
+    contactNoSignupInputChangeHandler = (e) => {
         this.setState({ contactNoSignup: e.target.value })
     }
 
@@ -320,24 +330,32 @@ class Header extends Component {
                                         <span className="redError">required</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
-                                <FormControl required>
+                                <FormControl>
                                     <InputLabel htmlFor="lastname">Last Name</InputLabel>
                                     <Input id="lastname" type="text" lastname={this.state.lastname}
                                         onChange={this.lastnameInputChangeHandler}
                                     />
-                                    <FormHelperText className={this.state.lastnameRequired}>
-                                        <span className="redError">required</span>
-                                    </FormHelperText>
                                 </FormControl><br /><br />
                                 <FormControl required>
                                     <InputLabel htmlFor="email">Email</InputLabel>
                                     <Input id="email" type="email" email={this.state.email}
                                         onChange={this.emailInputChangeHandler}
                                     />
-                                    <FormHelperText className={this.state.emailRequired}>
-                                        <span className="redError">required</span>
+                                    <FormHelperText>
+                                        {
+                                        this.state.emailRequired==="dispBlock"
+                                        ?
+                                         <span className="redError" >required</span>
+                                         :
+                                         (this.state.emailError==='dispBlock'?
+                                         <span className="redError">Invalid Email</span>:
+                                         null)
+                                        }
+                                       
+                                        
+                                        
                                     </FormHelperText>
-                                </FormControl><br /><br />
+                                </FormControl><br /><br/>
 
                                 <FormControl required>
                                     <InputLabel htmlFor="passwordregister">Password</InputLabel>
