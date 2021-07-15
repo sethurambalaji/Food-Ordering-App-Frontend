@@ -10,6 +10,8 @@ import { InputLabel } from '@material-ui/core';
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
+import { AccountCircle } from '@material-ui/icons';
 
 
 const styles = theme => ({
@@ -49,6 +51,11 @@ const styles = theme => ({
         width: '30ch',
     },
     loginContainer: {},
+    headerLoginBtn: {
+        [theme.breakpoints.only('xs')]: {
+            marginBottom: theme.spacing(1.5),
+        },
+    },
 
 
 });
@@ -97,7 +104,11 @@ class Header extends Component {
                             </div>
                         </div>
                         <div className={classes.loginContainer}>
-                            Login
+                            <div className={classes.headerLoginBtn}>
+                                <Button variant="contained" color="default" startIcon={<AccountCircle />}>
+                                    Login
+                                </Button>
+                            </div>
                         </div>
                     </Toolbar>
                 </AppBar>
