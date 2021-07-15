@@ -260,7 +260,11 @@ class Header extends Component {
     contactNoSignupInputChangeHandler = (e) => {
         this.setState({ contactNoSignup: e.target.value })
     }
-
+    
+    searchContentHandler = (e) => {
+        this.props.searchImage(e.target.value);
+        e.preventDefault();
+    }
 
 
     render() {
@@ -291,6 +295,7 @@ class Header extends Component {
                                             root: classes.inputRoot,
                                             input: classes.inputInput,
                                         }}
+                                        onChange={this.searchContentHandler}
                                     />
                                 </MuiThemeProvider>
                             </div>
