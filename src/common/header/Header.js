@@ -54,6 +54,9 @@ const styles = theme => ({
     },
     inputRoot: {
         color: 'inherit',
+        flexGrow:1,
+        flex:1,
+        flexBasis:'100%',
     },
     inputInput: {
         width: '30ch',
@@ -76,7 +79,14 @@ const styles = theme => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
+    
+    FormControl:{
+  
+            minWidth: '-webkit-fill-available',
+      
+    }
 
+   
 });
 
 const theme = createTheme({
@@ -110,7 +120,7 @@ const customStyles = {
         right: 'auto',
         bottom: 'auto',
         marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
+        transform: 'translate(-50%, -50%)',
     }
 };
 
@@ -132,11 +142,12 @@ class Header extends Component {
             lastname: "",
             email: "",
             emailRequired: "dispNone",
-            emailError: "dispNone",
+            isvalidEmailError: "dispNone",
             passwordregister: "",
             passwordRegisterRequired: "dispNone",
             contactNoSignup: "",
             contactNoSignupRequired: "dispNone",
+            isStrongPasswordError: "dispNone"
 
         }
     }
@@ -177,12 +188,14 @@ class Header extends Component {
             email: "",
             passwordregister: "",
             contactNo: "",
-            contactNoSignup:"",
+            contactNoSignup: "",
             firstnameRequired: 'dispNone',
             passwordRegisterRequired: 'dispNone',
+            isStrongPasswordError: 'dispNone',
             contactNoSignupRequired: 'dispNone',
             emailRequired: 'dispNone',
-            emailError: "dispNone",
+            isvalidEmailError: "dispNone",
+
         })
     }
 
@@ -203,7 +216,8 @@ class Header extends Component {
 
         this.state.firstname === "" ? this.setState({ firstnameRequired: 'dispBlock' }) : this.setState({ firstnameRequired: 'dispNone' })
         this.validateEmail();
-        this.state.passwordregister === "" ? this.setState({ passwordRegisterRequired: 'dispBlock' }) : this.setState({ passwordRegisterRequired: 'dispNone' })
+        this.validatePassword();
+
         this.state.contactNoSignup === "" ? this.setState({ contactNoSignupRequired: 'dispBlock' }) : this.setState({ contactNoSignupRequired: 'dispNone' })
 
     }
@@ -212,8 +226,13 @@ class Header extends Component {
     validateEmail = () => {
         let email = this.state.email;
         email === "" ? this.setState({ emailRequired: 'dispBlock' }) : this.setState({ emailRequired: 'dispNone' })
-       console.log(this.state.emailRequired)
-       validator.isEmail(email)? this.setState({ emailError: "dispNone" }):this.setState({ emailError: "dispBlock" });
+        validator.isEmail(email) ? this.setState({ isvalidEmailError: "dispNone" }) : this.setState({ isvalidEmailError: "dispBlock" });
+    }
+
+    validatePassword = () => {
+        let password = this.state.passwordregister;
+        password === "" ? this.setState({ passwordRegisterRequired: 'dispBlock' }) : this.setState({ passwordRegisterRequired: 'dispNone' })
+        validator.isStrongPassword(password) ? this.setState({ isStrongPasswordError: "dispNone" }) : this.setState({ isStrongPasswordError: "dispBlock" });
     }
 
     firstnameInputChangeHandler = (e) => {
@@ -321,7 +340,7 @@ class Header extends Component {
                         {
                             this.state.value === 1 &&
                             <TabContainer>
-                                <FormControl required>
+                                <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="firstname">First Name</InputLabel>
                                     <Input id="firstname" type="text" firstname={this.state.firstname}
                                         onChange={this.firstnameInputChangeHandler}
@@ -330,44 +349,56 @@ class Header extends Component {
                                         <span className="redError">required</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
-                                <FormControl>
+                                <FormControl className={classes.FormControl}>
                                     <InputLabel htmlFor="lastname">Last Name</InputLabel>
                                     <Input id="lastname" type="text" lastname={this.state.lastname}
                                         onChange={this.lastnameInputChangeHandler}
                                     />
                                 </FormControl><br /><br />
-                                <FormControl required>
+                                <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="email">Email</InputLabel>
                                     <Input id="email" type="email" email={this.state.email}
                                         onChange={this.emailInputChangeHandler}
                                     />
                                     <FormHelperText>
                                         {
-                                        this.state.emailRequired==="dispBlock"
-                                        ?
-                                         <span className="redError" >required</span>
-                                         :
-                                         (this.state.emailError==='dispBlock'?
-                                         <span className="redError">Invalid Email</span>:
-                                         null)
+                                            this.state.emailRequired === "dispBlock"
+                                                ?
+                                                <span className="redError" >required</span>
+                                                :
+                                                (this.state.isvalidEmailError === 'dispBlock' ?
+                                                    <span className="redError">Invalid Email</span> :
+                                                    null)
                                         }
-                                       
-                                        
-                                        
-                                    </FormHelperText>
-                                </FormControl><br /><br/>
 
-                                <FormControl required>
+
+
+                                    </FormHelperText>
+                                </FormControl><br /><br />
+
+                                <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="passwordregister">Password</InputLabel>
                                     <Input id="passwordregister" type="password" passwordregister={this.state.passwordregister}
                                         onChange={this.passwordRegisterInputChangeHandler}
                                     />
-                                    <FormHelperText className={this.state.passwordRegisterRequired}>
-                                        <span className="redError">required</span>
+                                    <FormHelperText>
+                                        {
+                                            this.state.passwordRegisterRequired === "dispBlock"
+                                                ?
+                                                <span className="redError">required</span>
+                                                :
+                                                (this.state.isStrongPasswordError === 'dispBlock' ?
+                                                    <span className="redError">
+                                                        Password must contain at least one capital letter, one small letter, one number, and one special character
+                                                    </span> :
+                                                    null)
+
+                                        }
+
                                     </FormHelperText>
                                 </FormControl><br /><br />
 
-                                <FormControl required>
+                                <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="contactNoSignup">Contact No</InputLabel>
                                     <Input id="contactNoSignup" type="tel" contactno={this.state.contactNoSignup}
                                         onChange={this.contactNoSignupInputChangeHandler}
