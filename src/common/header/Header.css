@@ -3,3 +3,15 @@ display: flex;
 background-color: darkgrey;
 justify-content: space-between;
 }
+
+.dispBlock{
+    display: block;
+}
+
+.dispNone{
+    display:none;
+}
+
+.redError{
+    color:red;
+}

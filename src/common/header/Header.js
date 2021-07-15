@@ -1,23 +1,26 @@
 import React, { Component } from 'react'
 import '../header/Header.css'
-import { withStyles } from '@material-ui/core/styles';
+
+import { AccountCircle } from '@material-ui/icons';
 import AppBar from '@material-ui/core/AppBar';
-import { Toolbar } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
+import { FormControl } from '@material-ui/core';
+import { FormHelperText } from '@material-ui/core';
 import { IconButton } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
 import { InputLabel } from '@material-ui/core';
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
-import { AccountCircle } from '@material-ui/icons';
 import { Modal } from '@material-ui/core';
-import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import SearchIcon from '@material-ui/icons/Search';
 import { Tab } from '@material-ui/core';
 import { Tabs } from '@material-ui/core';
+import { Toolbar } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
+import { withStyles } from '@material-ui/core/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 const styles = theme => ({
 
     grow: {
@@ -60,7 +63,18 @@ const styles = theme => ({
             marginBottom: theme.spacing(1.5),
         },
     },
-
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+    
+      paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+      },
 
 });
 
@@ -72,17 +86,8 @@ const theme = createTheme({
     }
 });
 
-//styles for Modal
-const modalStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
-    }
-};
+
+
 
 // Tab container inside the modal
 const TabContainer = function (props) {
@@ -97,6 +102,17 @@ TabContainer.propTypes = {
     children: PropTypes.node.isRequired
 }
 
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
+    }
+};
+
 
 
 class Header extends Component {
@@ -106,6 +122,10 @@ class Header extends Component {
         this.state = {
             isModalOpen: false,
             value:0,
+            contactno:"",
+            password:"",
+            contactnoRequired:"dispNone",
+            passwordRequired:"dispNone"
         }
     }
 
@@ -115,14 +135,35 @@ class Header extends Component {
         })
     }
 
-    tabChangeHandler = (event, value) => {
+    tabChangeHandler = (_event, value) => {
         this.setState({value});
     }
 
     closeModalHandler =() =>{
-        this.setState({isModalOpen:false})
-        this.setState({value:0})    
+        this.setState({isModalOpen:false,
+            value:0,
+            contactno:"",
+            password:"",
+            contactnoRequired:"dispNone",
+            passwordRequired:'dispNone',
+        })
+        
     }
+
+    loginValidationHandler = () =>{
+        this.state.contactno === "" ? this.setState({contactnoRequired:'dispBlock'}) : this.setState({contactnoRequired:'dispNone'});
+        this.state.password === "" ? this.setState({passwordRequired:'dispBlock'}) : this.setState({passwordRequired:'dispNone'});
+    }
+
+    contactnoInputChangeHandler = (e) =>{
+        this.setState({contactno : e.target.value})
+    }
+
+    passwordInputChangeHandler = (e) => {
+        this.setState({password : e.target.value})
+    }
+
+
 
     render() {
         const { classes } = this.props;
@@ -169,14 +210,43 @@ class Header extends Component {
                 <Modal
                     aria-hidden={false}
                     open={this.state.isModalOpen}
-                    contentlabel="Login"
+                    aria-labelledby="Login"
                     onClose={this.closeModalHandler}
-                    style={modalStyles}>
+                    style={customStyles}
+                    className={classes.modal}>
+                        <div className={classes.paper}>
                      <Tabs className="tabs" value = {this.state.value} onChange={this.tabChangeHandler}>
-                        <Tab label='Login'/>
-                        <Tab label='Register'/>
-                  </Tabs>   
+                        <Tab label='LOGIN'/>
+                        <Tab label='SIGNUP'/>
+                  </Tabs><br/>  
+                  {
+                      this.state.value===0 &&
+                      <TabContainer>
+                      <FormControl required>
+                          <InputLabel htmlFor="contactno">Contact No</InputLabel>
+                          <Input id="contactno" type="tel" contactno={this.state.contactno} onChange={this.contactnoInputChangeHandler}/>
+                          <FormHelperText className={this.state.contactnoRequired}>
+                            <span className='redError'>required</span>
+                          </FormHelperText>
+                      </FormControl><br/><br/>
+                      <FormControl required>
+                          <InputLabel htmlFor="password">Password</InputLabel>
+                          <Input id="password" type="password" password={this.state.password} onChange={this.passwordInputChangeHandler}/>
+                          <FormHelperText className={this.state.passwordRequired}>
+                            <span className='redError'>required</span>
+                          </FormHelperText>
+                      </FormControl><br/><br/>
+                      <Button variant='contained' color='primary'
+                        style={{textAlign:'center'}}
+                        onClick={this.loginValidationHandler}
+                        id="loginButton"
+                      >Login</Button>
+                  </TabContainer>
+                    
+                  } 
+                   
 
+                   </div>
                 </Modal>
             </div>
 
