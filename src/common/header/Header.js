@@ -144,15 +144,18 @@ class Header extends Component {
             // emailRequired: "dispNone",
             // isvalidEmailError: "dispNone",
             passwordregister: "",
-            passwordRegisterRequired: "dispNone",
+            // passwordRegisterRequired: "dispNone",
             contactNoSignup: "",
             contactNoSignupRequired: "dispNone",
-            isStrongPasswordError: "dispNone",
+            // isStrongPasswordError: "dispNone",
             contactNoSignupError: "dispNone",
 
             isSignupEmailError: "dispNone",
            
             signupEmailErrorMessage: "required",
+            
+            isSignupPasswordError:"dispNone",
+            signupPasswordErrorMessage:"required",
         }
     }
 
@@ -192,12 +195,15 @@ class Header extends Component {
             contactNo: "",
             contactNoSignup: "",
             firstnameRequired: 'dispNone',
-            passwordRegisterRequired: 'dispNone',
-            isStrongPasswordError: 'dispNone',
+            // passwordRegisterRequired: 'dispNone',
+            // isStrongPasswordError: 'dispNone',
             contactNoSignupRequired: 'dispNone',
             isSignupEmailError: "dispNone",
             signupEmailErrorMessage: "required",
-            contactNoSignupError: "dispNone"
+            contactNoSignupError: "dispNone",
+
+            isSignupPasswordError:"dispNone",
+            signupPasswordErrorMessage:"required"
 
         })
     }
@@ -238,8 +244,17 @@ class Header extends Component {
 
     validatePassword = () => {
         let password = this.state.passwordregister;
-        password === "" ? this.setState({ passwordRegisterRequired: 'dispBlock' }) : this.setState({ passwordRegisterRequired: 'dispNone' })
-        validator.isStrongPassword(password) ? this.setState({ isStrongPasswordError: "dispNone" }) : this.setState({ isStrongPasswordError: "dispBlock" });
+        let isValidPassword = password.length > 0  ?
+                              ( validator.isStrongPassword(password) ?true:false)
+                              :
+                              false
+        isValidPassword ? this.setState({isSignupPasswordError:"dispNone"}) :  this.setState({isSignupPasswordError:"dispBlock"})                    
+        let errorMessage = !password.length>0
+                                ?
+                                 "required"
+                                  :
+                                 "Password must contain at least one capital letter, one small letter, one number, and one special character"
+                                 this.setState({signupPasswordErrorMessage:errorMessage})
     }
 
     validateContactnoSignUp = () => {
@@ -393,17 +408,11 @@ class Header extends Component {
                                     <Input id="passwordregister" type="password" passwordregister={this.state.passwordregister}
                                         onChange={this.passwordRegisterInputChangeHandler}
                                     />
-                                    <FormHelperText>
+                                    <FormHelperText className={this.state.isSignupPasswordError}>
                                         {
-                                            this.state.passwordRegisterRequired === "dispBlock"
-                                                ?
-                                                <span className="redError">required</span>
-                                                :
-                                                (this.state.isStrongPasswordError === 'dispBlock' ?
-                                                    <span className="redError">
-                                                        Password must contain at least one capital letter, one small letter, one number, and one special character
-                                                    </span> :
-                                                    null)
+                                           
+                                                <span className="redError">{this.state.signupPasswordErrorMessage}</span>
+                                               
 
                                         }
 
