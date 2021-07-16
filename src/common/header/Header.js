@@ -91,7 +91,13 @@ const styles = theme => ({
 
         minWidth: '-webkit-fill-available',
 
-    }
+    },
+    customerProifleBtn: {
+        color: 'grey',
+        [theme.breakpoints.only('xs')]: {
+            marginBottom: theme.spacing(1.5),
+        },
+    },
 
 
 });
@@ -160,18 +166,18 @@ class Header extends Component {
             signupPasswordErrorMessage: "required",
             isSignupContactnoError: "dispNone",
 
-           
+
             openSnackBar: false,
-            
-            isLoginError:false,
+
+            isLoginError: false,
             loginErrorMessage: "",
             loginErrorMessageRequired: "dispBlock",
 
-            isLoggedIn:false,
+            isLoggedIn: sessionStorage.getItem("access-token") == null ? false : true,
 
             signupErrorMessage: "",
             isSignUpError: "dispNone",
-            
+
         }
     }
 
@@ -202,14 +208,14 @@ class Header extends Component {
         this.setState({ passwordRequired: 'dispNone' })
         this.setState({
             isLoginContactnoError: "dispNone",
-            loginContactnoErrorMeassage:"required",
-            isloginPasswordError:"dispNone",
-            loginPasswordErrorMessage:"required",
-            
-            isLoginError:false,
+            loginContactnoErrorMeassage: "required",
+            isloginPasswordError: "dispNone",
+            loginPasswordErrorMessage: "required",
+
+            isLoginError: false,
             loginErrorMessage: "",
             loginErrorMessageRequired: "dispBlock",
-            
+
         })
     }
 
@@ -237,17 +243,17 @@ class Header extends Component {
     loginValidationHandler = () => {
         let isValidContactno = this.validateLoginContactNo()
         let isValidLoginPassword = this.validateLoginPassword()
-        if(isValidContactno&&isValidLoginPassword){
+        if (isValidContactno && isValidLoginPassword) {
             this.login()
         }
-        else{
+        else {
             this.setState({
-            isLoginError:false,
-            loginErrorMessage: "",
-            loginErrorMessageRequired: "dispBlock",
+                isLoginError: false,
+                loginErrorMessage: "",
+                loginErrorMessageRequired: "dispBlock",
             })
         }
-        
+
     }
 
     login = () => {
@@ -271,7 +277,7 @@ class Header extends Component {
                     sessionStorage.setItem("first-name", loginResponse.first_name)
                     that.setState({
                         isLoggedIn: true,
-                        
+
                     });
                     //closes the modal after successful login
                     that.closeModalHandler();
@@ -289,9 +295,9 @@ class Header extends Component {
     validateLoginContactNo = () => {
         let contactno = this.state.contactno
         let isValidContactno = contactno.length > 0 ?
-                                (validator.isMobilePhone(contactno) && contactno.length === 10 ? true : false)
-                                     :
-                                false
+            (validator.isMobilePhone(contactno) && contactno.length === 10 ? true : false)
+            :
+            false
         isValidContactno ? this.setState({ isLoginContactnoError: "dispNone" }) : this.setState({ isLoginContactnoError: "dispBlock" })
         let errorMessage = !contactno.length > 0
             ?
@@ -326,12 +332,12 @@ class Header extends Component {
         let isSignupContactnoValid = this.validateContactnoSignUp();
         if (isSignupIFirstNameValid && isSignupEmailValid && isSignupPasswordValid && isSignupContactnoValid)
             this.signup();
-        else{
+        else {
             this.setState({
                 signupErrorMessage: "",
                 isSignUpError: "dispNone",
             })
-        }    
+        }
 
     }
 
@@ -491,12 +497,20 @@ class Header extends Component {
                             </div>
                         </div>
                         <div className={classes.loginContainer}>
-                            <div className={classes.headerLoginBtn}>
-                                <Button variant="contained" color="default" startIcon={<AccountCircle />}
-                                    onClick={this.openModalHandler}>
-                                    Login
-                                </Button>
-                            </div>
+                            {!this.state.isLoggedIn ?
+                                <div className={classes.headerLoginBtn}>
+                                    <Button variant="contained" color="default" startIcon={<AccountCircle />}
+                                        onClick={this.openModalHandler}>
+                                        Login
+                                    </Button>
+                                </div>
+                                :
+                                <div className={classes.customerProifleBtn}>
+                                    <Button id="customer-profile" startIcon={<AccountCircle />}>
+                                        {sessionStorage.getItem("first-name")}
+                                    </Button>
+                                </div>
+                            }
                         </div>
                     </Toolbar>
                 </AppBar>
@@ -517,28 +531,28 @@ class Header extends Component {
                             <TabContainer>
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="contactno">Contact No</InputLabel>
-                                    <Input id="contactno" type="tel" contactno={this.state.contactno} 
-                                           onChange={this.contactnoInputChangeHandler} 
-                                           value={this.state.contactno}
-                                           />
+                                    <Input id="contactno" type="tel" contactno={this.state.contactno}
+                                        onChange={this.contactnoInputChangeHandler}
+                                        value={this.state.contactno}
+                                    />
                                     <FormHelperText className={this.state.isLoginContactnoError}>
                                         <span className='redError'>{this.state.loginContactnoErrorMeassage}</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="password">Password</InputLabel>
-                                    <Input id="password" type="password" password={this.state.password} 
-                                           onChange={this.passwordInputChangeHandler} 
-                                           value={this.state.password}
-                                           />
+                                    <Input id="password" type="password" password={this.state.password}
+                                        onChange={this.passwordInputChangeHandler}
+                                        value={this.state.password}
+                                    />
                                     <FormHelperText className={this.state.isloginPasswordError}>
                                         <span className='redError'>{this.state.loginPasswordErrorMessage}</span>
                                     </FormHelperText>
-                                    
-                                      <FormHelperText className={this.state.loginErrorMessageRequired}>
-                                      <span className='redError'>{this.state.loginErrorMessage}</span>
-                                     </FormHelperText>
-                                    
+
+                                    <FormHelperText className={this.state.loginErrorMessageRequired}>
+                                        <span className='redError'>{this.state.loginErrorMessage}</span>
+                                    </FormHelperText>
+
                                 </FormControl><br /><br />
                                 <Button variant='contained' color='primary'
                                     style={{ textAlign: 'center' }}
@@ -597,12 +611,12 @@ class Header extends Component {
                                         onChange={this.contactNoSignupInputChangeHandler}
                                         value={this.state.contactNoSignup}
                                     />
-                                    <FormHelperText className={this.state.isSignupContactnoError}>  
-                                            <span className="redError">{this.state.signupContactnoErrorMessage}</span>
+                                    <FormHelperText className={this.state.isSignupContactnoError}>
+                                        <span className="redError">{this.state.signupContactnoErrorMessage}</span>
                                     </FormHelperText>
                                     <FormHelperText className={this.state.isSignUpError}>
-                                      <span className='redError'>{this.state.signupErrorMessage}</span>
-                                     </FormHelperText>
+                                        <span className='redError'>{this.state.signupErrorMessage}</span>
+                                    </FormHelperText>
                                 </FormControl><br /><br />
                                 <Button id="registerButton" variant="contained" color="primary" onClick={this.registerValidationHandler}>Register</Button>
                             </TabContainer>

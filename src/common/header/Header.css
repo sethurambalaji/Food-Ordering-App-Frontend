@@ -15,3 +15,7 @@ justify-content: space-between;
 .redError{
     color:red;
 }
+
+#customer-profile {
+	color: white;
+}
