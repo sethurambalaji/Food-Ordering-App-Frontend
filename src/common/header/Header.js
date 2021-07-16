@@ -193,6 +193,12 @@ class Header extends Component {
         this.setState({ password: "" })
         this.setState({ contactnoRequired: 'dispNone' })
         this.setState({ passwordRequired: 'dispNone' })
+        this.setState({
+            isLoginContactnoError: "dispNone",
+            loginContactnoErrorMeassage:"required",
+            isloginPasswordError:"dispNone",
+            loginPasswordErrorMessage:"required",
+        })
     }
 
     resetSignupForm = () => {
@@ -234,7 +240,11 @@ class Header extends Component {
     }
 
     validateLoginPassword = () => {
-        this.state.password === "" ? this.setState({ passwordRequired: 'dispBlock' }) : this.setState({ passwordRequired: 'dispNone' });
+        let password = this.state.password
+        let isValidPassword = password.length > 0 ? true : false
+        isValidPassword ? this.setState({ isloginPasswordError: "dispNone" }) : this.setState({ isloginPasswordError: "dispBlock" })
+        let errorMessage = "required"
+        this.setState({ loginPasswordErrorMessage: errorMessage })
     }
 
     contactnoInputChangeHandler = (e) => {
@@ -248,7 +258,7 @@ class Header extends Component {
     registerValidationHandler = () => {
         let isSignupIFirstNameValid = this.validateSignupFirstName();
         let isSignupEmailValid = this.validateEmail();
-        let isSignupPasswordValid = this.validatePassword();
+        let isSignupPasswordValid = this.validateSignupPassword();
         let isSignupContactnoValid = this.validateContactnoSignUp();
         if (isSignupIFirstNameValid && isSignupEmailValid && isSignupPasswordValid && isSignupContactnoValid)
             this.signup();
@@ -318,7 +328,7 @@ class Header extends Component {
         return isValidEmail;
     }
 
-    validatePassword = () => {
+    validateSignupPassword = () => {
         let password = this.state.passwordregister;
         let isValidPassword = password.length > 0 ?
             (validator.isStrongPassword(password) ? true : false)
