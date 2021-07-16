@@ -165,11 +165,11 @@ class Header extends Component {
 
             openSnackBar: false,
             
-           
+            isLoginError:false,
             loginErrorMessage: "",
-            loginErroMessageRequired: "dispBlock",
+            loginErrorMessageRequired: "dispBlock",
 
-            isLoggedIn:false
+            isLoggedIn:false,
             
         }
     }
@@ -205,9 +205,10 @@ class Header extends Component {
             isloginPasswordError:"dispNone",
             loginPasswordErrorMessage:"required",
             
-          
+            isLoginError:false,
             loginErrorMessage: "",
-            loginErroMessageRequired: "dispBlock",
+            loginErrorMessageRequired: "dispBlock",
+            
         })
     }
 
@@ -232,8 +233,17 @@ class Header extends Component {
     loginValidationHandler = () => {
         let isValidContactno = this.validateLoginContactNo()
         let isValidLoginPassword = this.validateLoginPassword()
-        if(isValidContactno&&isValidLoginPassword)
-         this.login()
+        if(isValidContactno&&isValidLoginPassword){
+            this.login()
+        }
+        else{
+            this.setState({
+            isLoginError:false,
+            loginErrorMessage: "",
+            loginErrorMessageRequired: "dispBlock",
+            })
+        }
+        
     }
 
     login = () => {
@@ -246,8 +256,8 @@ class Header extends Component {
                 // displays the login error message
                 if (this.status === 401) {
                     that.setState({
-                        loginPasswordErrorMessage: loginResponse.message,
-                        isloginPasswordError: "dispBlock",
+                        loginErrorMessage: loginResponse.message,
+                        loginErrorMessageRequired: "dispBlock"
                     });
                 }
                 // after successful login stores uuid, access-token, first-name inside session storage and displays the login snackbar
@@ -257,6 +267,7 @@ class Header extends Component {
                     sessionStorage.setItem("first-name", loginResponse.first_name)
                     that.setState({
                         isLoggedIn: true,
+                        
                     });
                     //closes the modal after successful login
                     that.closeModalHandler();
@@ -507,6 +518,11 @@ class Header extends Component {
                                     <FormHelperText className={this.state.isloginPasswordError}>
                                         <span className='redError'>{this.state.loginPasswordErrorMessage}</span>
                                     </FormHelperText>
+                                    
+                                      <FormHelperText className={this.state.loginErrorMessageRequired}>
+                                      <span className='redError'>{this.state.loginErrorMessage}</span>
+                                     </FormHelperText>
+                                    
                                 </FormControl><br /><br />
                                 <Button variant='contained' color='primary'
                                     style={{ textAlign: 'center' }}
