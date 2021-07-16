@@ -145,11 +145,13 @@ class Header extends Component {
             contactNoSignup: "",
             isSignupEmailError: "dispNone",
             signupEmailErrorMessage: "required",
-            isSignupPasswordError:"dispNone",
-            signupPasswordErrorMessage:"required",
+            isSignupPasswordError: "dispNone",
+            signupPasswordErrorMessage: "required",
             isSignupContactnoError: "dispNone",
-            signupContactnoErrorMessage:"required",
-         
+            
+            signupErrorMessage: "",
+            signupErrorMessageRequired: "dispBlock"
+
         }
     }
 
@@ -189,14 +191,13 @@ class Header extends Component {
             contactNo: "",
             contactNoSignup: "",
             firstnameRequired: 'dispNone',
-            contactNoSignupRequired: 'dispNone',
             isSignupEmailError: "dispNone",
             signupEmailErrorMessage: "required",
-            contactNoSignupError: "dispNone",
-            signupContactnoErrorMessage:"required",
-            isSignupPasswordError:"dispNone",
-            signupPasswordErrorMessage:"required"
- })
+            isSignupPasswordError: "dispNone",
+            signupPasswordErrorMessage: "required",
+            isSignupContactnoError:'dispNone',
+            signupContactnoErrorMessage: "required",
+        })
     }
 
     loginValidationHandler = () => {
@@ -213,57 +214,100 @@ class Header extends Component {
     }
 
     registerValidationHandler = () => {
-
-        this.state.firstname === "" ? this.setState({ firstnameRequired: 'dispBlock' }) : this.setState({ firstnameRequired: 'dispNone' })
-        this.validateEmail();
-        this.validatePassword();
-        this.validateContactnoSignUp();
-
+        let isSignupIFirstNameValid = this.validateSignupFirstName();
+        let isSignupEmailValid = this.validateEmail();
+        let isSignupPasswordValid = this.validatePassword();
+        let isSignupContactnoValid = this.validateContactnoSignUp();
+        if( isSignupIFirstNameValid && isSignupEmailValid && isSignupPasswordValid && isSignupContactnoValid)
+          this.signup();
+   
     }
 
+    signup = () => {
+        let signupData = JSON.stringify({
+            "contact_number": this.state.contactNoSignup,
+            "email_address": this.state.email,
+            "first_name": this.state.firstname,
+            "last_name": this.state.lastname,
+            "password": this.state.passwordregister
+        });
+
+        let that = this;
+        let xhrSignup = new XMLHttpRequest();
+        xhrSignup.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                let responseText = JSON.parse(this.responseText);
+                // displays the signup error message
+                if (this.status === 400) {
+                    that.setState({
+                        signupContactnoErrorMessage: responseText.message,
+                        isSignupContactnoError: "dispBlock"
+                    });
+                }
+                // after successful signup tab changes to login tab inside the modal and displays the signup snackbar
+                if (this.status === 201) {
+                    that.setState({
+                        value: 0,
+                    });
+                    that.resetSignupForm();
+                }
+            }
+        });
+        let url = 'http://localhost:8080/api/customer/signup'
+        xhrSignup.open("POST", url);
+        xhrSignup.setRequestHeader("Content-Type", "application/json");
+        xhrSignup.setRequestHeader("Cache-Control", "no-cache");
+        xhrSignup.send(signupData);
+    }
+    
+    validateSignupFirstName = () => {
+        this.state.firstname === "" ? this.setState({ firstnameRequired: 'dispBlock' }) : this.setState({ firstnameRequired: 'dispNone' })
+        return this.state.firstnameRequired === "dispBlock" ? false : true;
+    }
 
     validateEmail = () => {
         let email = this.state.email;
-        let isValidEmail =  email.length>0?
-                           (validator.isEmail(email)?true:false)
-                             :
-                             false
-        isValidEmail   ? this.setState({ isSignupEmailError: "dispNone" }) : this.setState({ isSignupEmailError: "dispBlock" });
-        let errorMessage = !email.length>0? "required" : "Invalid Email"  
-        this.setState({signupEmailErrorMessage:errorMessage})        
+        let isValidEmail = email.length > 0 ?
+            (validator.isEmail(email) ? true : false)
+            :
+            false
+        isValidEmail ? this.setState({ isSignupEmailError: "dispNone" }) : this.setState({ isSignupEmailError: "dispBlock" });
+        let errorMessage = !email.length > 0 ? "required" : "Invalid Email"
+        this.setState({ signupEmailErrorMessage: errorMessage })
+        return isValidEmail;
     }
 
     validatePassword = () => {
         let password = this.state.passwordregister;
-        let isValidPassword = password.length > 0  ?
-                              ( validator.isStrongPassword(password) ?true:false)
-                              :
-                              false
-        isValidPassword ? this.setState({isSignupPasswordError:"dispNone"}) :  this.setState({isSignupPasswordError:"dispBlock"})                    
-        let errorMessage = !password.length>0
-                                ?
-                                 "required"
-                                  :
-                                 "Password must contain at least one capital letter, one small letter, one number, and one special character"
-                                 this.setState({signupPasswordErrorMessage:errorMessage})
+        let isValidPassword = password.length > 0 ?
+            (validator.isStrongPassword(password) ? true : false)
+            :
+            false
+        isValidPassword ? this.setState({ isSignupPasswordError: "dispNone" }) : this.setState({ isSignupPasswordError: "dispBlock" })
+        let errorMessage = !password.length > 0
+            ?
+            "required"
+            :
+            "Password must contain at least one capital letter, one small letter, one number, and one special character"
+        this.setState({ signupPasswordErrorMessage: errorMessage })
+        return isValidPassword;
     }
 
     validateContactnoSignUp = () => {
         let contactno = this.state.contactNoSignup;
-        // contactno === "" ? this.setState({ contactNoSignupRequired: 'dispBlock' }) : this.setState({ contactNoSignupRequired: 'dispNone' })
-        // validator.isMobilePhone(contactno) && contactno.length === 10 ? this.setState({ contactNoSignupError: 'dispNone' }) : this.setState({ contactNoSignupError: 'dispBlock' })
-        let isValidContactno = contactno.length > 0  ?
-                              ( validator.isMobilePhone(contactno) && contactno.length === 10 ?true:false)
-                              :
-                              false
-        isValidContactno ? this.setState({isSignupContactnoError:"dispNone"}) :  this.setState({isSignupContactnoError:"dispBlock"})                    
+        let isValidContactno = contactno.length > 0 ?
+            (validator.isMobilePhone(contactno) && contactno.length === 10 ? true : false)
+            :
+            false
+        isValidContactno ? this.setState({ isSignupContactnoError: "dispNone" }) : this.setState({ isSignupContactnoError: "dispBlock" })
         let errorMessage = !contactno.length > 0
-                                ?
-                                "required"
-                                :
-                                "Contact No. must contain only numbers and must be 10 digits long"                       
-        this.setState({signupContactnoErrorMessage:errorMessage})
-    
+            ?
+            "required"
+            :
+            "Contact No. must contain only numbers and must be 10 digits long"
+        this.setState({ signupContactnoErrorMessage: errorMessage })
+        return isValidContactno;
+
     }
 
     firstnameInputChangeHandler = (e) => {
@@ -397,7 +441,7 @@ class Header extends Component {
                                         onChange={this.emailInputChangeHandler}
                                     />
                                     <FormHelperText className={this.state.isSignupEmailError}>
-                                                <span className="redError" >{this.state.signupEmailErrorMessage}</span>
+                                        <span className="redError" >{this.state.signupEmailErrorMessage}</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
 
@@ -407,7 +451,7 @@ class Header extends Component {
                                         onChange={this.passwordRegisterInputChangeHandler}
                                     />
                                     <FormHelperText className={this.state.isSignupPasswordError}>
-                                                <span className="redError">{this.state.signupPasswordErrorMessage}</span>
+                                        <span className="redError">{this.state.signupPasswordErrorMessage}</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
 
@@ -417,9 +461,9 @@ class Header extends Component {
                                         onChange={this.contactNoSignupInputChangeHandler}
                                     />
                                     <FormHelperText className={this.state.isSignupContactnoError}>
-                                        {                                           
-                                           <span className="redError">{this.state.signupContactnoErrorMessage}</span>
-                                                                                 }
+                                        {
+                                            <span className="redError">{this.state.signupContactnoErrorMessage}</span>
+                                        }
                                     </FormHelperText>
                                 </FormControl><br /><br />
                                 <Button id="registerButton" variant="contained" color="primary" onClick={this.registerValidationHandler}>Register</Button>
