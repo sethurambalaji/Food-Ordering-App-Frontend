@@ -141,21 +141,15 @@ class Header extends Component {
             firstnameRequired: "dispNone",
             lastname: "",
             email: "",
-            // emailRequired: "dispNone",
-            // isvalidEmailError: "dispNone",
             passwordregister: "",
-            // passwordRegisterRequired: "dispNone",
             contactNoSignup: "",
-            contactNoSignupRequired: "dispNone",
-            // isStrongPasswordError: "dispNone",
-            contactNoSignupError: "dispNone",
-
             isSignupEmailError: "dispNone",
-           
             signupEmailErrorMessage: "required",
-            
             isSignupPasswordError:"dispNone",
             signupPasswordErrorMessage:"required",
+            isSignupContactnoError: "dispNone",
+            signupContactnoErrorMessage:"required",
+         
         }
     }
 
@@ -195,17 +189,14 @@ class Header extends Component {
             contactNo: "",
             contactNoSignup: "",
             firstnameRequired: 'dispNone',
-            // passwordRegisterRequired: 'dispNone',
-            // isStrongPasswordError: 'dispNone',
             contactNoSignupRequired: 'dispNone',
             isSignupEmailError: "dispNone",
             signupEmailErrorMessage: "required",
             contactNoSignupError: "dispNone",
-
+            signupContactnoErrorMessage:"required",
             isSignupPasswordError:"dispNone",
             signupPasswordErrorMessage:"required"
-
-        })
+ })
     }
 
     loginValidationHandler = () => {
@@ -259,8 +250,20 @@ class Header extends Component {
 
     validateContactnoSignUp = () => {
         let contactno = this.state.contactNoSignup;
-        contactno === "" ? this.setState({ contactNoSignupRequired: 'dispBlock' }) : this.setState({ contactNoSignupRequired: 'dispNone' })
-        validator.isMobilePhone(contactno) && contactno.length === 10 ? this.setState({ contactNoSignupError: 'dispNone' }) : this.setState({ contactNoSignupError: 'dispBlock' })
+        // contactno === "" ? this.setState({ contactNoSignupRequired: 'dispBlock' }) : this.setState({ contactNoSignupRequired: 'dispNone' })
+        // validator.isMobilePhone(contactno) && contactno.length === 10 ? this.setState({ contactNoSignupError: 'dispNone' }) : this.setState({ contactNoSignupError: 'dispBlock' })
+        let isValidContactno = contactno.length > 0  ?
+                              ( validator.isMobilePhone(contactno) && contactno.length === 10 ?true:false)
+                              :
+                              false
+        isValidContactno ? this.setState({isSignupContactnoError:"dispNone"}) :  this.setState({isSignupContactnoError:"dispBlock"})                    
+        let errorMessage = !contactno.length > 0
+                                ?
+                                "required"
+                                :
+                                "Contact No. must contain only numbers and must be 10 digits long"                       
+        this.setState({signupContactnoErrorMessage:errorMessage})
+    
     }
 
     firstnameInputChangeHandler = (e) => {
@@ -394,12 +397,7 @@ class Header extends Component {
                                         onChange={this.emailInputChangeHandler}
                                     />
                                     <FormHelperText className={this.state.isSignupEmailError}>
-                                      
-                                            
-                                                
                                                 <span className="redError" >{this.state.signupEmailErrorMessage}</span>
-                                             
-                                        
                                     </FormHelperText>
                                 </FormControl><br /><br />
 
@@ -409,13 +407,7 @@ class Header extends Component {
                                         onChange={this.passwordRegisterInputChangeHandler}
                                     />
                                     <FormHelperText className={this.state.isSignupPasswordError}>
-                                        {
-                                           
                                                 <span className="redError">{this.state.signupPasswordErrorMessage}</span>
-                                               
-
-                                        }
-
                                     </FormHelperText>
                                 </FormControl><br /><br />
 
@@ -424,21 +416,10 @@ class Header extends Component {
                                     <Input id="contactNoSignup" type="tel" contactno={this.state.contactNoSignup}
                                         onChange={this.contactNoSignupInputChangeHandler}
                                     />
-                                    <FormHelperText>
-                                        {
-                                            this.state.contactNoSignupRequired === "dispBlock"
-                                                ?
-                                                <span className="redError">required</span>
-                                                :
-                                                (this.state.contactNoSignupError === 'dispBlock'
-                                                    ?
-                                                    <span className="redError">
-                                                        Contact No. must contain only numbers and must be 10 digits long
-                                                    </span>
-                                                    :
-                                                    null
-                                                )
-                                        }
+                                    <FormHelperText className={this.state.isSignupContactnoError}>
+                                        {                                           
+                                           <span className="redError">{this.state.signupContactnoErrorMessage}</span>
+                                                                                 }
                                     </FormHelperText>
                                 </FormControl><br /><br />
                                 <Button id="registerButton" variant="contained" color="primary" onClick={this.registerValidationHandler}>Register</Button>
