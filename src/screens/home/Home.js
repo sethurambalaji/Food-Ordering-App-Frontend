@@ -1,15 +1,20 @@
-import React,{Component} from 'react'
+import React, { Component } from 'react'
 import Header from '../../common/header/Header'
 
-class Home extends Component{
-    
-    searchImage = (searchImageCaption) => {
-        console.log(searchImageCaption)
+class Home extends Component {
+
+    searchImage = (event) => {
+        let searchImage = event.target.value
+        console.log(searchImage)
     }
 
-    render(){
-        return(
-            <Header {...this.props} baseUrl={this.props.baseUrl} searchImage={this.searchImage} />
+
+    render() {
+        return (
+            <div>
+                <Header {...this.props} baseUrl={this.props.baseUrl} searchImage={this.searchImage} />
+
+            </div>
         )
     }
 }

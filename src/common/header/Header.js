@@ -141,14 +141,18 @@ class Header extends Component {
             firstnameRequired: "dispNone",
             lastname: "",
             email: "",
-            emailRequired: "dispNone",
-            isvalidEmailError: "dispNone",
+            // emailRequired: "dispNone",
+            // isvalidEmailError: "dispNone",
             passwordregister: "",
             passwordRegisterRequired: "dispNone",
             contactNoSignup: "",
             contactNoSignupRequired: "dispNone",
             isStrongPasswordError: "dispNone",
-            contactNoSignupError: "dispNone"
+            contactNoSignupError: "dispNone",
+
+            isSignupEmailError: "dispNone",
+           
+            signupEmailErrorMessage: "required",
         }
     }
 
@@ -180,8 +184,6 @@ class Header extends Component {
     }
 
     resetSignupForm = () => {
-        console.log(this.state.passwordregister);
-        console.log(this.state.passwordRegisterRequired);
         this.setState({
             firstname: "",
             lastname: "",
@@ -193,8 +195,8 @@ class Header extends Component {
             passwordRegisterRequired: 'dispNone',
             isStrongPasswordError: 'dispNone',
             contactNoSignupRequired: 'dispNone',
-            emailRequired: 'dispNone',
-            isvalidEmailError: "dispNone",
+            isSignupEmailError: "dispNone",
+            signupEmailErrorMessage: "required",
             contactNoSignupError: "dispNone"
 
         })
@@ -225,8 +227,13 @@ class Header extends Component {
 
     validateEmail = () => {
         let email = this.state.email;
-        email === "" ? this.setState({ emailRequired: 'dispBlock' }) : this.setState({ emailRequired: 'dispNone' })
-        validator.isEmail(email) ? this.setState({ isvalidEmailError: "dispNone" }) : this.setState({ isvalidEmailError: "dispBlock" });
+        let isValidEmail =  email.length>0?
+                           (validator.isEmail(email)?true:false)
+                             :
+                             false
+        isValidEmail   ? this.setState({ isSignupEmailError: "dispNone" }) : this.setState({ isSignupEmailError: "dispBlock" });
+        let errorMessage = !email.length>0? "required" : "Invalid Email"  
+        this.setState({signupEmailErrorMessage:errorMessage})        
     }
 
     validatePassword = () => {
@@ -260,7 +267,7 @@ class Header extends Component {
     contactNoSignupInputChangeHandler = (e) => {
         this.setState({ contactNoSignup: e.target.value })
     }
-    
+
     searchContentHandler = (e) => {
         this.props.searchImage(e.target.value);
         e.preventDefault();
@@ -371,19 +378,13 @@ class Header extends Component {
                                     <Input id="email" type="email" email={this.state.email}
                                         onChange={this.emailInputChangeHandler}
                                     />
-                                    <FormHelperText>
-                                        {
-                                            this.state.emailRequired === "dispBlock"
-                                                ?
-                                                <span className="redError" >required</span>
-                                                :
-                                                (this.state.isvalidEmailError === 'dispBlock' ?
-                                                    <span className="redError">Invalid Email</span> :
-                                                    null)
-                                        }
-
-
-
+                                    <FormHelperText className={this.state.isSignupEmailError}>
+                                      
+                                            
+                                                
+                                                <span className="redError" >{this.state.signupEmailErrorMessage}</span>
+                                             
+                                        
                                     </FormHelperText>
                                 </FormControl><br /><br />
 
