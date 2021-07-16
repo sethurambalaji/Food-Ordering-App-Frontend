@@ -160,9 +160,7 @@ class Header extends Component {
             signupPasswordErrorMessage: "required",
             isSignupContactnoError: "dispNone",
 
-            signupErrorMessage: "",
-            signupErrorMessageRequired: "dispBlock",
-
+           
             openSnackBar: false,
             
             isLoginError:false,
@@ -170,6 +168,9 @@ class Header extends Component {
             loginErrorMessageRequired: "dispBlock",
 
             isLoggedIn:false,
+
+            signupErrorMessage: "",
+            isSignUpError: "dispNone",
             
         }
     }
@@ -227,6 +228,9 @@ class Header extends Component {
             signupPasswordErrorMessage: "required",
             isSignupContactnoError: 'dispNone',
             signupContactnoErrorMessage: "required",
+
+            signupErrorMessage: "",
+            isSignUpError: "dispNone",
         })
     }
 
@@ -322,6 +326,12 @@ class Header extends Component {
         let isSignupContactnoValid = this.validateContactnoSignUp();
         if (isSignupIFirstNameValid && isSignupEmailValid && isSignupPasswordValid && isSignupContactnoValid)
             this.signup();
+        else{
+            this.setState({
+                signupErrorMessage: "",
+                isSignUpError: "dispNone",
+            })
+        }    
 
     }
 
@@ -342,8 +352,8 @@ class Header extends Component {
                 // displays the signup error message
                 if (this.status === 400) {
                     that.setState({
-                        signupContactnoErrorMessage: responseText.message,
-                        isSignupContactnoError: "dispBlock"
+                        signupErrorMessage: responseText.message,
+                        isSignUpError: "dispBlock",
                     });
                 }
                 // after successful signup tab changes to login tab inside the modal and displays the signup snackbar
@@ -507,14 +517,20 @@ class Header extends Component {
                             <TabContainer>
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="contactno">Contact No</InputLabel>
-                                    <Input id="contactno" type="tel" contactno={this.state.contactno} onChange={this.contactnoInputChangeHandler} />
+                                    <Input id="contactno" type="tel" contactno={this.state.contactno} 
+                                           onChange={this.contactnoInputChangeHandler} 
+                                           value={this.state.contactno}
+                                           />
                                     <FormHelperText className={this.state.isLoginContactnoError}>
                                         <span className='redError'>{this.state.loginContactnoErrorMeassage}</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="password">Password</InputLabel>
-                                    <Input id="password" type="password" password={this.state.password} onChange={this.passwordInputChangeHandler} />
+                                    <Input id="password" type="password" password={this.state.password} 
+                                           onChange={this.passwordInputChangeHandler} 
+                                           value={this.state.password}
+                                           />
                                     <FormHelperText className={this.state.isloginPasswordError}>
                                         <span className='redError'>{this.state.loginPasswordErrorMessage}</span>
                                     </FormHelperText>
@@ -540,6 +556,7 @@ class Header extends Component {
                                     <InputLabel htmlFor="firstname">First Name</InputLabel>
                                     <Input id="firstname" type="text" firstname={this.state.firstname}
                                         onChange={this.firstnameInputChangeHandler}
+                                        value={this.state.firstname}
                                     />
                                     <FormHelperText className={this.state.firstnameRequired}>
                                         <span className="redError">required</span>
@@ -549,12 +566,14 @@ class Header extends Component {
                                     <InputLabel htmlFor="lastname">Last Name</InputLabel>
                                     <Input id="lastname" type="text" lastname={this.state.lastname}
                                         onChange={this.lastnameInputChangeHandler}
+                                        value={this.state.lastname}
                                     />
                                 </FormControl><br /><br />
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="email">Email</InputLabel>
                                     <Input id="email" type="email" email={this.state.email}
                                         onChange={this.emailInputChangeHandler}
+                                        value={this.state.email}
                                     />
                                     <FormHelperText className={this.state.isSignupEmailError}>
                                         <span className="redError" >{this.state.signupEmailErrorMessage}</span>
@@ -565,6 +584,7 @@ class Header extends Component {
                                     <InputLabel htmlFor="passwordregister">Password</InputLabel>
                                     <Input id="passwordregister" type="password" passwordregister={this.state.passwordregister}
                                         onChange={this.passwordRegisterInputChangeHandler}
+                                        value={this.state.passwordregister}
                                     />
                                     <FormHelperText className={this.state.isSignupPasswordError}>
                                         <span className="redError">{this.state.signupPasswordErrorMessage}</span>
@@ -575,12 +595,14 @@ class Header extends Component {
                                     <InputLabel htmlFor="contactNoSignup">Contact No</InputLabel>
                                     <Input id="contactNoSignup" type="tel" contactno={this.state.contactNoSignup}
                                         onChange={this.contactNoSignupInputChangeHandler}
+                                        value={this.state.contactNoSignup}
                                     />
-                                    <FormHelperText className={this.state.isSignupContactnoError}>
-                                        {
+                                    <FormHelperText className={this.state.isSignupContactnoError}>  
                                             <span className="redError">{this.state.signupContactnoErrorMessage}</span>
-                                        }
                                     </FormHelperText>
+                                    <FormHelperText className={this.state.isSignUpError}>
+                                      <span className='redError'>{this.state.signupErrorMessage}</span>
+                                     </FormHelperText>
                                 </FormControl><br /><br />
                                 <Button id="registerButton" variant="contained" color="primary" onClick={this.registerValidationHandler}>Register</Button>
                             </TabContainer>
