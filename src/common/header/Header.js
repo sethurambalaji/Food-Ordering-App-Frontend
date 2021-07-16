@@ -141,7 +141,11 @@ class Header extends Component {
             isModalOpen: false,
             value: 0,
             contactno: "",
+            isLoginContactnoError: "dispNone",
+            loginContactnoErrorMeassage: "required",
             password: "",
+            isloginPasswordError: "dispNone",
+            loginPasswordErrorMessage: "required",
             contactnoRequired: "dispNone",
             passwordRequired: "dispNone",
             firstname: "",
@@ -155,11 +159,11 @@ class Header extends Component {
             isSignupPasswordError: "dispNone",
             signupPasswordErrorMessage: "required",
             isSignupContactnoError: "dispNone",
-            
+
             signupErrorMessage: "",
             signupErrorMessageRequired: "dispBlock",
 
-            openSnackBar:false,
+            openSnackBar: false,
 
         }
     }
@@ -204,13 +208,32 @@ class Header extends Component {
             signupEmailErrorMessage: "required",
             isSignupPasswordError: "dispNone",
             signupPasswordErrorMessage: "required",
-            isSignupContactnoError:'dispNone',
+            isSignupContactnoError: 'dispNone',
             signupContactnoErrorMessage: "required",
         })
     }
 
     loginValidationHandler = () => {
-        this.state.contactno === "" ? this.setState({ contactnoRequired: 'dispBlock' }) : this.setState({ contactnoRequired: 'dispNone' });
+        this.validateLoginContactNo()
+        this.validateLoginPassword()
+    }
+
+    validateLoginContactNo = () => {
+        let contactno = this.state.contactno
+        let isValidContactno = contactno.length > 0 ?
+                                (validator.isMobilePhone(contactno) && contactno.length === 10 ? true : false)
+                                     :
+                                false
+        isValidContactno ? this.setState({ isLoginContactnoError: "dispNone" }) : this.setState({ isLoginContactnoError: "dispBlock" })
+        let errorMessage = !contactno.length > 0
+            ?
+            "required"
+            :
+            "Invalid Contact"
+        this.setState({ loginContactnoErrorMeassage: errorMessage })
+    }
+
+    validateLoginPassword = () => {
         this.state.password === "" ? this.setState({ passwordRequired: 'dispBlock' }) : this.setState({ passwordRequired: 'dispNone' });
     }
 
@@ -227,9 +250,9 @@ class Header extends Component {
         let isSignupEmailValid = this.validateEmail();
         let isSignupPasswordValid = this.validatePassword();
         let isSignupContactnoValid = this.validateContactnoSignUp();
-        if( isSignupIFirstNameValid && isSignupEmailValid && isSignupPasswordValid && isSignupContactnoValid)
-          this.signup();
-   
+        if (isSignupIFirstNameValid && isSignupEmailValid && isSignupPasswordValid && isSignupContactnoValid)
+            this.signup();
+
     }
 
     signup = () => {
@@ -257,7 +280,7 @@ class Header extends Component {
                 if (this.status === 201) {
                     that.setState({
                         value: 0,
-                        openSnackBar:true,
+                        openSnackBar: true,
                     });
                     that.resetSignupForm();
                 }
@@ -272,12 +295,12 @@ class Header extends Component {
 
     handleCloseSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
-    
-        this.setState({openSnackBar:false});
-      };
-    
+
+        this.setState({ openSnackBar: false });
+    };
+
     validateSignupFirstName = () => {
         this.state.firstname === "" ? this.setState({ firstnameRequired: 'dispBlock' }) : this.setState({ firstnameRequired: 'dispNone' })
         return this.state.firstnameRequired === "dispBlock" ? false : true;
@@ -415,15 +438,15 @@ class Header extends Component {
                                 <FormControl required>
                                     <InputLabel htmlFor="contactno">Contact No</InputLabel>
                                     <Input id="contactno" type="tel" contactno={this.state.contactno} onChange={this.contactnoInputChangeHandler} />
-                                    <FormHelperText className={this.state.contactnoRequired}>
-                                        <span className='redError'>required</span>
+                                    <FormHelperText className={this.state.isLoginContactnoError}>
+                                        <span className='redError'>{this.state.loginContactnoErrorMeassage}</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
                                 <FormControl required>
                                     <InputLabel htmlFor="password">Password</InputLabel>
                                     <Input id="password" type="password" password={this.state.password} onChange={this.passwordInputChangeHandler} />
-                                    <FormHelperText className={this.state.passwordRequired}>
-                                        <span className='redError'>required</span>
+                                    <FormHelperText className={this.state.isloginPasswordError}>
+                                        <span className='redError'>{this.state.loginPasswordErrorMessage}</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
                                 <Button variant='contained' color='primary'
@@ -487,23 +510,23 @@ class Header extends Component {
                                 <Button id="registerButton" variant="contained" color="primary" onClick={this.registerValidationHandler}>Register</Button>
                             </TabContainer>
                         }
-                        {   this.state.openSnackBar?
+                        {this.state.openSnackBar ?
                             <Snackbar
-                            anchorOrigin={{
-                              vertical: 'bottom',
-                              horizontal: 'left',
-                            }}
-                            open={this.state.openSnackBar}
-                            autoHideDuration={6000}
-                            onClose={this.handleCloseSnackBar}
-                            message="Registered successfully! Please login now!"
-                            action={
-                              <React.Fragment>
-                                <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleCloseSnackBar}>
-                                  <CloseIcon fontSize="small" />
-                                </IconButton>
-                              </React.Fragment>
-                            }
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                open={this.state.openSnackBar}
+                                autoHideDuration={6000}
+                                onClose={this.handleCloseSnackBar}
+                                message="Registered successfully! Please login now!"
+                                action={
+                                    <React.Fragment>
+                                        <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleCloseSnackBar}>
+                                            <CloseIcon fontSize="small" />
+                                        </IconButton>
+                                    </React.Fragment>
+                                }
                             />
                             :
                             null
