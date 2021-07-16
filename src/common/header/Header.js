@@ -164,7 +164,13 @@ class Header extends Component {
             signupErrorMessageRequired: "dispBlock",
 
             openSnackBar: false,
+            
+           
+            loginErrorMessage: "",
+            loginErroMessageRequired: "dispBlock",
 
+            isLoggedIn:false
+            
         }
     }
 
@@ -198,6 +204,10 @@ class Header extends Component {
             loginContactnoErrorMeassage:"required",
             isloginPasswordError:"dispNone",
             loginPasswordErrorMessage:"required",
+            
+          
+            loginErrorMessage: "",
+            loginErroMessageRequired: "dispBlock",
         })
     }
 
@@ -220,8 +230,45 @@ class Header extends Component {
     }
 
     loginValidationHandler = () => {
-        this.validateLoginContactNo()
-        this.validateLoginPassword()
+        let isValidContactno = this.validateLoginContactNo()
+        let isValidLoginPassword = this.validateLoginPassword()
+        if(isValidContactno&&isValidLoginPassword)
+         this.login()
+    }
+
+    login = () => {
+        let loginData = null;
+        let that = this;
+        let xhrLogin = new XMLHttpRequest();
+        xhrLogin.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                let loginResponse = JSON.parse(this.responseText);
+                // displays the login error message
+                if (this.status === 401) {
+                    that.setState({
+                        loginPasswordErrorMessage: loginResponse.message,
+                        isloginPasswordError: "dispBlock",
+                    });
+                }
+                // after successful login stores uuid, access-token, first-name inside session storage and displays the login snackbar
+                if (this.status === 200) {
+                    sessionStorage.setItem("uuid", loginResponse.id);
+                    sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
+                    sessionStorage.setItem("first-name", loginResponse.first_name)
+                    that.setState({
+                        isLoggedIn: true,
+                    });
+                    //closes the modal after successful login
+                    that.closeModalHandler();
+                }
+            }
+        });
+        let url = 'http://localhost:8080/api/customer/login';
+        xhrLogin.open("Post", url);
+        xhrLogin.setRequestHeader("Authorization", "Basic " + window.btoa(this.state.contactno + ":" + this.state.password));
+        xhrLogin.setRequestHeader("Content-Type", "application/json");
+        xhrLogin.setRequestHeader("Cache-Control", "no-cache");
+        xhrLogin.send(loginData);
     }
 
     validateLoginContactNo = () => {
@@ -237,6 +284,7 @@ class Header extends Component {
             :
             "Invalid Contact"
         this.setState({ loginContactnoErrorMeassage: errorMessage })
+        return isValidContactno;
     }
 
     validateLoginPassword = () => {
@@ -245,6 +293,7 @@ class Header extends Component {
         isValidPassword ? this.setState({ isloginPasswordError: "dispNone" }) : this.setState({ isloginPasswordError: "dispBlock" })
         let errorMessage = "required"
         this.setState({ loginPasswordErrorMessage: errorMessage })
+        return isValidPassword
     }
 
     contactnoInputChangeHandler = (e) => {
