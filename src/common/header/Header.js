@@ -12,6 +12,9 @@ import { IconButton } from '@material-ui/core';
 import { InputLabel } from '@material-ui/core';
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import {Link} from 'react-router-dom';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { Modal } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import SearchIcon from '@material-ui/icons/Search';
@@ -24,6 +27,8 @@ import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import validator from 'validator'
+
+
 
 
 
@@ -177,7 +182,10 @@ class Header extends Component {
 
             signupErrorMessage: "",
             isSignUpError: "dispNone",
+            
 
+            menuState: false,
+            anchorEl: null,
         }
     }
 
@@ -462,6 +470,15 @@ class Header extends Component {
         e.preventDefault();
     }
 
+    // onProfileIconClick = (e) => {
+    //     this.setState({ 'menuState': !this.state.menuState, 'anchorEl': e.currentTarget });
+    // }
+
+    onProfileIconClick = (e) => {
+        this.setState({'menuState': !this.state.menuState, 'anchorEl': e.currentTarget});
+    }
+
+
 
     render() {
         const { classes } = this.props;
@@ -506,148 +523,161 @@ class Header extends Component {
                                 </div>
                                 :
                                 <div className={classes.customerProifleBtn}>
-                                    <Button id="customer-profile" startIcon={<AccountCircle />}>
+                                    <Button id="customer-profile" startIcon={<AccountCircle />}
+                                        onClick={this.onProfileIconClick}
+                                    >
                                         {sessionStorage.getItem("first-name")}
                                     </Button>
+                                    <Menu id="profile-menu" open={this.state.menuState} onClose={this.onMenuClose}
+                                      anchorEl={this.state.anchorEl} getContentAnchorEl={null}
+                                      anchorOrigin={{vertical: "bottom", horizontal: "left"}} keepMounted>
+                                    <MenuItem style={{minHeight: 48}}><Typography><Link
+                                        to={"/profile"} style={{textDecoration: 'none', color: 'black'}}>My
+                                        Profile</Link></Typography></MenuItem>
+                                    <MenuItem style={{minHeight: 48}}><Link to={"/"} style={{
+                                        textDecoration: 'none',
+                                        color: 'black'
+                                    }}><Typography>Logout</Typography></Link></MenuItem>
+                                </Menu> 
                                 </div>
                             }
-                        </div>
+                                </div>
                     </Toolbar>
                 </AppBar>
-                <Modal
-                    aria-hidden={false}
-                    open={this.state.isModalOpen}
-                    aria-labelledby="Login"
-                    onClose={this.closeModalHandler}
-                    style={customStyles}
-                    className={classes.modal}>
-                    <div className={classes.paper}>
-                        <Tabs className="tabs" value={this.state.value} onChange={this.tabChangeHandler}>
-                            <Tab label='LOGIN' />
-                            <Tab label='SIGNUP' />
-                        </Tabs><br />
-                        {
-                            this.state.value === 0 &&
-                            <TabContainer>
-                                <FormControl className={classes.FormControl} required>
-                                    <InputLabel htmlFor="contactno">Contact No</InputLabel>
-                                    <Input id="contactno" type="tel" contactno={this.state.contactno}
-                                        onChange={this.contactnoInputChangeHandler}
-                                        value={this.state.contactno}
-                                    />
-                                    <FormHelperText className={this.state.isLoginContactnoError}>
-                                        <span className='redError'>{this.state.loginContactnoErrorMeassage}</span>
-                                    </FormHelperText>
-                                </FormControl><br /><br />
-                                <FormControl className={classes.FormControl} required>
-                                    <InputLabel htmlFor="password">Password</InputLabel>
-                                    <Input id="password" type="password" password={this.state.password}
-                                        onChange={this.passwordInputChangeHandler}
-                                        value={this.state.password}
-                                    />
-                                    <FormHelperText className={this.state.isloginPasswordError}>
-                                        <span className='redError'>{this.state.loginPasswordErrorMessage}</span>
-                                    </FormHelperText>
+                    <Modal
+                        aria-hidden={false}
+                        open={this.state.isModalOpen}
+                        aria-labelledby="Login"
+                        onClose={this.closeModalHandler}
+                        style={customStyles}
+                        className={classes.modal}>
+                        <div className={classes.paper}>
+                            <Tabs className="tabs" value={this.state.value} onChange={this.tabChangeHandler}>
+                                <Tab label='LOGIN' />
+                                <Tab label='SIGNUP' />
+                            </Tabs><br />
+                            {
+                                this.state.value === 0 &&
+                                <TabContainer>
+                                    <FormControl className={classes.FormControl} required>
+                                        <InputLabel htmlFor="contactno">Contact No</InputLabel>
+                                        <Input id="contactno" type="tel" contactno={this.state.contactno}
+                                            onChange={this.contactnoInputChangeHandler}
+                                            value={this.state.contactno}
+                                        />
+                                        <FormHelperText className={this.state.isLoginContactnoError}>
+                                            <span className='redError'>{this.state.loginContactnoErrorMeassage}</span>
+                                        </FormHelperText>
+                                    </FormControl><br /><br />
+                                    <FormControl className={classes.FormControl} required>
+                                        <InputLabel htmlFor="password">Password</InputLabel>
+                                        <Input id="password" type="password" password={this.state.password}
+                                            onChange={this.passwordInputChangeHandler}
+                                            value={this.state.password}
+                                        />
+                                        <FormHelperText className={this.state.isloginPasswordError}>
+                                            <span className='redError'>{this.state.loginPasswordErrorMessage}</span>
+                                        </FormHelperText>
 
-                                    <FormHelperText className={this.state.loginErrorMessageRequired}>
-                                        <span className='redError'>{this.state.loginErrorMessage}</span>
-                                    </FormHelperText>
+                                        <FormHelperText className={this.state.loginErrorMessageRequired}>
+                                            <span className='redError'>{this.state.loginErrorMessage}</span>
+                                        </FormHelperText>
 
-                                </FormControl><br /><br />
-                                <Button variant='contained' color='primary'
-                                    style={{ textAlign: 'center' }}
-                                    onClick={this.loginValidationHandler}
-                                    id="loginButton"
-                                >Login</Button>
-                            </TabContainer>
+                                    </FormControl><br /><br />
+                                    <Button variant='contained' color='primary'
+                                        style={{ textAlign: 'center' }}
+                                        onClick={this.loginValidationHandler}
+                                        id="loginButton"
+                                    >Login</Button>
+                                </TabContainer>
 
-                        }
+                            }
 
-                        {
-                            this.state.value === 1 &&
-                            <TabContainer>
-                                <FormControl className={classes.FormControl} required>
-                                    <InputLabel htmlFor="firstname">First Name</InputLabel>
-                                    <Input id="firstname" type="text" firstname={this.state.firstname}
-                                        onChange={this.firstnameInputChangeHandler}
-                                        value={this.state.firstname}
-                                    />
-                                    <FormHelperText className={this.state.firstnameRequired}>
-                                        <span className="redError">required</span>
-                                    </FormHelperText>
-                                </FormControl><br /><br />
-                                <FormControl className={classes.FormControl}>
-                                    <InputLabel htmlFor="lastname">Last Name</InputLabel>
-                                    <Input id="lastname" type="text" lastname={this.state.lastname}
-                                        onChange={this.lastnameInputChangeHandler}
-                                        value={this.state.lastname}
-                                    />
-                                </FormControl><br /><br />
-                                <FormControl className={classes.FormControl} required>
-                                    <InputLabel htmlFor="email">Email</InputLabel>
-                                    <Input id="email" type="email" email={this.state.email}
-                                        onChange={this.emailInputChangeHandler}
-                                        value={this.state.email}
-                                    />
-                                    <FormHelperText className={this.state.isSignupEmailError}>
-                                        <span className="redError" >{this.state.signupEmailErrorMessage}</span>
-                                    </FormHelperText>
-                                </FormControl><br /><br />
+                            {
+                                this.state.value === 1 &&
+                                <TabContainer>
+                                    <FormControl className={classes.FormControl} required>
+                                        <InputLabel htmlFor="firstname">First Name</InputLabel>
+                                        <Input id="firstname" type="text" firstname={this.state.firstname}
+                                            onChange={this.firstnameInputChangeHandler}
+                                            value={this.state.firstname}
+                                        />
+                                        <FormHelperText className={this.state.firstnameRequired}>
+                                            <span className="redError">required</span>
+                                        </FormHelperText>
+                                    </FormControl><br /><br />
+                                    <FormControl className={classes.FormControl}>
+                                        <InputLabel htmlFor="lastname">Last Name</InputLabel>
+                                        <Input id="lastname" type="text" lastname={this.state.lastname}
+                                            onChange={this.lastnameInputChangeHandler}
+                                            value={this.state.lastname}
+                                        />
+                                    </FormControl><br /><br />
+                                    <FormControl className={classes.FormControl} required>
+                                        <InputLabel htmlFor="email">Email</InputLabel>
+                                        <Input id="email" type="email" email={this.state.email}
+                                            onChange={this.emailInputChangeHandler}
+                                            value={this.state.email}
+                                        />
+                                        <FormHelperText className={this.state.isSignupEmailError}>
+                                            <span className="redError" >{this.state.signupEmailErrorMessage}</span>
+                                        </FormHelperText>
+                                    </FormControl><br /><br />
 
-                                <FormControl className={classes.FormControl} required>
-                                    <InputLabel htmlFor="passwordregister">Password</InputLabel>
-                                    <Input id="passwordregister" type="password" passwordregister={this.state.passwordregister}
-                                        onChange={this.passwordRegisterInputChangeHandler}
-                                        value={this.state.passwordregister}
-                                    />
-                                    <FormHelperText className={this.state.isSignupPasswordError}>
-                                        <span className="redError">{this.state.signupPasswordErrorMessage}</span>
-                                    </FormHelperText>
-                                </FormControl><br /><br />
+                                    <FormControl className={classes.FormControl} required>
+                                        <InputLabel htmlFor="passwordregister">Password</InputLabel>
+                                        <Input id="passwordregister" type="password" passwordregister={this.state.passwordregister}
+                                            onChange={this.passwordRegisterInputChangeHandler}
+                                            value={this.state.passwordregister}
+                                        />
+                                        <FormHelperText className={this.state.isSignupPasswordError}>
+                                            <span className="redError">{this.state.signupPasswordErrorMessage}</span>
+                                        </FormHelperText>
+                                    </FormControl><br /><br />
 
-                                <FormControl className={classes.FormControl} required>
-                                    <InputLabel htmlFor="contactNoSignup">Contact No</InputLabel>
-                                    <Input id="contactNoSignup" type="tel" contactno={this.state.contactNoSignup}
-                                        onChange={this.contactNoSignupInputChangeHandler}
-                                        value={this.state.contactNoSignup}
-                                    />
-                                    <FormHelperText className={this.state.isSignupContactnoError}>
-                                        <span className="redError">{this.state.signupContactnoErrorMessage}</span>
-                                    </FormHelperText>
-                                    <FormHelperText className={this.state.isSignUpError}>
-                                        <span className='redError'>{this.state.signupErrorMessage}</span>
-                                    </FormHelperText>
-                                </FormControl><br /><br />
-                                <Button id="registerButton" variant="contained" color="primary" onClick={this.registerValidationHandler}>Register</Button>
-                            </TabContainer>
-                        }
-                        {this.state.openSnackBar ?
-                            <Snackbar
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                open={this.state.openSnackBar}
-                                autoHideDuration={6000}
-                                onClose={this.handleCloseSnackBar}
-                                message="Registered successfully! Please login now!"
-                                action={
-                                    <React.Fragment>
-                                        <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleCloseSnackBar}>
-                                            <CloseIcon fontSize="small" />
-                                        </IconButton>
-                                    </React.Fragment>
-                                }
-                            />
-                            :
-                            null
-                        }
-                    </div>
-                </Modal>
+                                    <FormControl className={classes.FormControl} required>
+                                        <InputLabel htmlFor="contactNoSignup">Contact No</InputLabel>
+                                        <Input id="contactNoSignup" type="tel" contactno={this.state.contactNoSignup}
+                                            onChange={this.contactNoSignupInputChangeHandler}
+                                            value={this.state.contactNoSignup}
+                                        />
+                                        <FormHelperText className={this.state.isSignupContactnoError}>
+                                            <span className="redError">{this.state.signupContactnoErrorMessage}</span>
+                                        </FormHelperText>
+                                        <FormHelperText className={this.state.isSignUpError}>
+                                            <span className='redError'>{this.state.signupErrorMessage}</span>
+                                        </FormHelperText>
+                                    </FormControl><br /><br />
+                                    <Button id="registerButton" variant="contained" color="primary" onClick={this.registerValidationHandler}>Register</Button>
+                                </TabContainer>
+                            }
+                            {this.state.openSnackBar ?
+                                <Snackbar
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    }}
+                                    open={this.state.openSnackBar}
+                                    autoHideDuration={6000}
+                                    onClose={this.handleCloseSnackBar}
+                                    message="Registered successfully! Please login now!"
+                                    action={
+                                        <React.Fragment>
+                                            <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleCloseSnackBar}>
+                                                <CloseIcon fontSize="small" />
+                                            </IconButton>
+                                        </React.Fragment>
+                                    }
+                                />
+                                :
+                                null
+                            }
+                        </div>
+                    </Modal>
             </div>
 
-        )
+                )
     }
 
 }
-export default withStyles(styles)(Header);
+                export default withStyles(styles)(Header);
