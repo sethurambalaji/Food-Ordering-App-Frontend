@@ -352,7 +352,7 @@ class Header extends Component {
         xhrSignup.send(signupData);
     }
 
-    handleCloseSnackBar = (event, reason) => {
+    handleCloseSnackBar = (_event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -494,14 +494,14 @@ class Header extends Component {
                         {
                             this.state.value === 0 &&
                             <TabContainer>
-                                <FormControl required>
+                                <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="contactno">Contact No</InputLabel>
                                     <Input id="contactno" type="tel" contactno={this.state.contactno} onChange={this.contactnoInputChangeHandler} />
                                     <FormHelperText className={this.state.isLoginContactnoError}>
                                         <span className='redError'>{this.state.loginContactnoErrorMeassage}</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
-                                <FormControl required>
+                                <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="password">Password</InputLabel>
                                     <Input id="password" type="password" password={this.state.password} onChange={this.passwordInputChangeHandler} />
                                     <FormHelperText className={this.state.isloginPasswordError}>
