@@ -4,6 +4,7 @@ import '../header/Header.css'
 import { AccountCircle } from '@material-ui/icons';
 import AppBar from '@material-ui/core/AppBar';
 import { Button } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import { FormControl } from '@material-ui/core';
 import { FormHelperText } from '@material-ui/core';
@@ -14,6 +15,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import { Modal } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import SearchIcon from '@material-ui/icons/Search';
+import Snackbar from '@material-ui/core/Snackbar';
 import { Tab } from '@material-ui/core';
 import { Tabs } from '@material-ui/core';
 import { Toolbar } from '@material-ui/core';
@@ -22,6 +24,11 @@ import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import validator from 'validator'
+
+
+
+
+
 const styles = theme => ({
 
     grow: {
@@ -150,7 +157,9 @@ class Header extends Component {
             isSignupContactnoError: "dispNone",
             
             signupErrorMessage: "",
-            signupErrorMessageRequired: "dispBlock"
+            signupErrorMessageRequired: "dispBlock",
+
+            openSnackBar:false,
 
         }
     }
@@ -248,6 +257,7 @@ class Header extends Component {
                 if (this.status === 201) {
                     that.setState({
                         value: 0,
+                        openSnackBar:true,
                     });
                     that.resetSignupForm();
                 }
@@ -259,6 +269,14 @@ class Header extends Component {
         xhrSignup.setRequestHeader("Cache-Control", "no-cache");
         xhrSignup.send(signupData);
     }
+
+    handleCloseSnackBar = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        this.setState({openSnackBar:false});
+      };
     
     validateSignupFirstName = () => {
         this.state.firstname === "" ? this.setState({ firstnameRequired: 'dispBlock' }) : this.setState({ firstnameRequired: 'dispNone' })
@@ -469,8 +487,27 @@ class Header extends Component {
                                 <Button id="registerButton" variant="contained" color="primary" onClick={this.registerValidationHandler}>Register</Button>
                             </TabContainer>
                         }
-
-
+                        {   this.state.openSnackBar?
+                            <Snackbar
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'left',
+                            }}
+                            open={this.state.openSnackBar}
+                            autoHideDuration={6000}
+                            onClose={this.handleCloseSnackBar}
+                            message="Registered successfully! Please login now!"
+                            action={
+                              <React.Fragment>
+                                <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleCloseSnackBar}>
+                                  <CloseIcon fontSize="small" />
+                                </IconButton>
+                              </React.Fragment>
+                            }
+                            />
+                            :
+                            null
+                        }
                     </div>
                 </Modal>
             </div>
