@@ -13,6 +13,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
+import { Redirect } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 //importing the css file of the Home page
@@ -55,59 +56,6 @@ class Home extends Component {
     //called before render()
     componentWillUnmount() {
         window.removeEventListener('resize', this.noOfColumns);
-    }
-
-    render() {
-        const { classes } = this.props;
-        return (
-            this.mounted === true ?
-                <div>
-                    <Header showSearchBox={true} searchHandler={this.searchHandler} baseUrl={this.props.baseUrl} />
-                    {/* if no restaurants found with the entered name displays the No restaurant with the given name. */}
-                    {this.state.restaurants.length === 0 && this.state.loading === false ?
-                        <Typography variant="h6">No restaurant with the given name.</Typography> :
-                        <ImageList cols={this.state.cards} rowHeight="auto">
-                            {this.state.restaurants.map(restaurant => (
-                                <ImageListItem key={'restaurant' + restaurant.id} >
-                                    {/* restaurant details card onclick redirects to restaurant details page*/}
-                                    <Card className={classes.restaurantsCard} onClick={() => this.restaurantDetails(restaurant.id)}>
-                                        <CardActionArea>
-                                            <CardMedia component="img" height={160} image={restaurant.photo_URL} title={restaurant.restaurant_name} />
-                                            <CardContent>
-                                                <div className="restaurant-title-div">
-                                                    <Typography gutterBottom variant='h5' component='h2'>
-                                                        {restaurant.restaurant_name}
-                                                    </Typography>
-                                                </div>
-                                                <div className="restaurant-categories-div">
-                                                    <Typography variant='subtitle1'>
-                                                        {restaurant.categories}
-                                                    </Typography>
-                                                </div>
-                                                <div className="rating-and-avg-div">
-                                                    {/* restaurant rating */}
-                                                    <div className="restaurant-rating-div">
-                                                        <Typography variant='body1'>
-                                                            <FontAwesomeIcon icon="star" /> {restaurant.customer_rating} ({restaurant.number_customers_rated})
-                                                        </Typography>
-                                                    </div>
-                                                    {/* restaurant average price */}
-                                                    <div className="restaurant-avg-price-div">
-                                                        <Typography variant='body1'>
-                                                            <FontAwesomeIcon icon="inr"/> {restaurant.average_price} for two
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </Card>
-                                </ImageListItem>
-                            ))}
-                        </ImageList>
-                    }
-                </div>
-                : ""
-        )
     }
 
     //fetches the restaurants from backend
@@ -195,6 +143,60 @@ class Home extends Component {
     // redirects to restaurant details page with restauranat id
     restaurantDetails = (restaurantId) => {
         this.props.history.push('/restaurant/' + restaurantId);
+    }
+
+    render() {
+        const { classes } = this.props;
+        return (
+            this.state.loggedIn === false ? <Redirect to="/"/> :
+            this.mounted === true ?
+                <div>
+                    <Header showSearchBox={true} searchHandler={this.searchHandler} baseUrl={this.props.baseUrl} />
+                    {/* if no restaurants found with the entered name displays the No restaurant with the given name. */}
+                    {this.state.restaurants.length === 0 && this.state.loading === false ?
+                        <Typography variant="h6">No restaurant with the given name.</Typography> :
+                        <ImageList cols={this.state.cards} rowHeight="auto">
+                            {this.state.restaurants.map(restaurant => (
+                                <ImageListItem key={'restaurant' + restaurant.id} >
+                                    {/* restaurant details card onclick redirects to restaurant details page*/}
+                                    <Card className={classes.restaurantsCard} onClick={() => this.restaurantDetails(restaurant.id)}>
+                                        <CardActionArea>
+                                            <CardMedia component="img" height={160} image={restaurant.photo_URL} title={restaurant.restaurant_name} />
+                                            <CardContent>
+                                                <div className="restaurant-title-div">
+                                                    <Typography gutterBottom variant='h5' component='h2'>
+                                                        {restaurant.restaurant_name}
+                                                    </Typography>
+                                                </div>
+                                                <div className="restaurant-categories-div">
+                                                    <Typography variant='subtitle1'>
+                                                        {restaurant.categories}
+                                                    </Typography>
+                                                </div>
+                                                <div className="rating-and-avg-div">
+                                                    {/* restaurant rating */}
+                                                    <div className="restaurant-rating-div">
+                                                        <Typography variant='body1'>
+                                                            <FontAwesomeIcon icon="star" /> {restaurant.customer_rating} ({restaurant.number_customers_rated})
+                                                        </Typography>
+                                                    </div>
+                                                    {/* restaurant average price */}
+                                                    <div className="restaurant-avg-price-div">
+                                                        <Typography variant='body1'>
+                                                            <FontAwesomeIcon icon="inr"/> {restaurant.average_price} for two
+                                                        </Typography>
+                                                    </div>
+                                                </div>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                </ImageListItem>
+                            ))}
+                        </ImageList>
+                    }
+                </div>
+                : ""
+        )
     }
 }
 
