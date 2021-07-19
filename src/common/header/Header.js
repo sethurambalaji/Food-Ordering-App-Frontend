@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import '../header/Header.css'
-
+import { withStyles, ThemeProvider } from '@material-ui/core/styles';
 import { AccountCircle } from '@material-ui/icons';
 import AppBar from '@material-ui/core/AppBar';
 import { Button } from '@material-ui/core';
@@ -23,8 +23,7 @@ import { Tab } from '@material-ui/core';
 import { Tabs } from '@material-ui/core';
 import { Toolbar } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 import validator from 'validator'
 
 
@@ -192,19 +191,19 @@ class Header extends Component {
             anchorEl: null,
         }
     }
-    
+
     //Open Modal Handler
     openModalHandler = () => {
         this.setState({
             isModalOpen: true,
         })
     }
-    
+
     //Tab Change Handlerr
     tabChangeHandler = (_event, value) => {
         this.setState({ value });
     }
-    
+
     //close Modal handler
     closeModalHandler = () => {
         this.setState({
@@ -215,7 +214,7 @@ class Header extends Component {
         this.resetSignupForm();
 
     }
-    
+
     //reset Login form
     resetLoginForm = () => {
         this.setState({ contactno: "" })
@@ -234,7 +233,7 @@ class Header extends Component {
 
         })
     }
-    
+
     //reset Sign up form
     resetSignupForm = () => {
         this.setState({
@@ -256,7 +255,7 @@ class Header extends Component {
             isSignUpError: "dispNone",
         })
     }
-    
+
     //Login validation
     loginValidationHandler = () => {
         let isValidContactno = this.validateLoginContactNo()
@@ -273,7 +272,7 @@ class Header extends Component {
         }
 
     }
-    
+
     //Login API call
     login = () => {
         let loginData = null;
@@ -310,7 +309,7 @@ class Header extends Component {
         xhrLogin.setRequestHeader("Cache-Control", "no-cache");
         xhrLogin.send(loginData);
     }
-    
+
     //validate contact number in login form
     validateLoginContactNo = () => {
         let contactno = this.state.contactno
@@ -327,7 +326,7 @@ class Header extends Component {
         this.setState({ loginContactnoErrorMeassage: errorMessage })
         return isValidContactno;
     }
-    
+
     //validate password in login form
     validateLoginPassword = () => {
         let password = this.state.password
@@ -337,17 +336,17 @@ class Header extends Component {
         this.setState({ loginPasswordErrorMessage: errorMessage })
         return isValidPassword
     }
-    
+
     //login form - contact number input change handler
     contactnoInputChangeHandler = (e) => {
         this.setState({ contactno: e.target.value })
     }
-    
+
     //login form - password Handler
     passwordInputChangeHandler = (e) => {
         this.setState({ password: e.target.value })
     }
-    
+
     //Signup form Validation
     registerValidationHandler = () => {
         let isSignupIFirstNameValid = this.validateSignupFirstName();
@@ -364,7 +363,7 @@ class Header extends Component {
         }
 
     }
-    
+
     //Sign up - API call
     signup = () => {
         let signupData = JSON.stringify({
@@ -403,7 +402,7 @@ class Header extends Component {
         xhrSignup.setRequestHeader("Cache-Control", "no-cache");
         xhrSignup.send(signupData);
     }
-    
+
     //Close snack bar handler
     handleCloseSnackBar = (_event, reason) => {
         if (reason === 'clickaway') {
@@ -412,13 +411,13 @@ class Header extends Component {
 
         this.setState({ openSnackBar: false });
     };
-    
+
     //Signup form validation
     validateSignupFirstName = () => {
         this.state.firstname === "" ? this.setState({ firstnameRequired: 'dispBlock' }) : this.setState({ firstnameRequired: 'dispNone' })
         return this.state.firstnameRequired === "dispBlock" ? false : true;
     }
-    
+
     //SIgnup form - email validation
     validateEmail = () => {
         let email = this.state.email;
@@ -431,7 +430,7 @@ class Header extends Component {
         this.setState({ signupEmailErrorMessage: errorMessage })
         return isValidEmail;
     }
-    
+
     //Sign up Form - Password Validation
     validateSignupPassword = () => {
         let password = this.state.passwordregister;
@@ -448,7 +447,7 @@ class Header extends Component {
         this.setState({ signupPasswordErrorMessage: errorMessage })
         return isValidPassword;
     }
-    
+
     //Sign up form - Contact no Validation
     validateContactnoSignUp = () => {
         let contactno = this.state.contactNoSignup;
@@ -466,44 +465,44 @@ class Header extends Component {
         return isValidContactno;
 
     }
-    
+
     //Sign up form - first name validation
     firstnameInputChangeHandler = (e) => {
         this.setState({ firstname: e.target.value })
     }
-    
+
     //signup form- Last name reuired validation only
     lastnameInputChangeHandler = (e) => {
         this.setState({ lastname: e.target.value })
     }
-    
+
     //Sign up form- Email validation
     emailInputChangeHandler = (e) => {
         this.setState({ email: e.target.value })
     }
-    
+
     //Sign up Form - password Input change Handler
     passwordRegisterInputChangeHandler = (e) => {
         this.setState({ passwordregister: e.target.value })
     }
-    
+
     //Sign up Form - COntact number input change handler
     contactNoSignupInputChangeHandler = (e) => {
         this.setState({ contactNoSignup: e.target.value })
     }
-    
+
     //Sign up Form - SearchContent Handler
     searchContentHandler = (e) => {
         this.props.searchImage(e.target.value);
         e.preventDefault();
     }
 
-        
+
     //Profile icon click handler
     onProfileIconClick = (e) => {
         this.setState({ 'menuState': !this.state.menuState, 'anchorEl': e.currentTarget });
     }
-    
+
     //Menu Items close handler
     onMenuClose = () => {
         this.setState({ 'menuState': !this.state.menuState, 'anchorEl': null });
@@ -536,45 +535,46 @@ class Header extends Component {
             <div className={classes.root}>
                 <AppBar position="static" className={classes.appBar}>
                     <Toolbar className={classes.headerElements}>
-                      
+
                         {/* Logo */}
                         <div className={classes.logoContainer}>
                             <IconButton disableRipple={true} edge="start" color="inherit"
-                                aria-label="app logo">
+                                        aria-label="app logo">
                                 <FastfoodIcon />
                             </IconButton>
                         </div>
 
                         {/* Search Box */}
-                        <div className={classes.searchBoxContainer}>
+                        {this.props.showSearchBox ?
                             <div className={classes.searchBox}>
-                                <MuiThemeProvider theme={theme}>
+                                <ThemeProvider theme={theme}>
                                     <InputLabel htmlFor="search-box-input" />
                                     <Input id="search-box-input"
-                                        startAdornment={
-                                            <InputAdornment position="start">
-                                                <SearchIcon />
-                                            </InputAdornment>
-                                        }
-                                        placeholder="Search by Restaurant Name"
-                                        classes={{
-                                            root: classes.inputRoot,
-                                            input: classes.inputInput,
-                                        }}
-                                        onChange={this.searchContentHandler}
+                                           startAdornment={
+                                               <InputAdornment position="start">
+                                                   <SearchIcon />
+                                               </InputAdornment>
+                                           }
+                                           placeholder="Search by Restaurant Name"
+                                           classes={{
+                                               root: classes.inputRoot,
+                                               input: classes.inputInput,
+                                           }}
+                                           onChange={this.props.searchHandler}
                                     />
-                                </MuiThemeProvider>
+                                </ThemeProvider>
                             </div>
-                        </div>
+                            : null
+                        }
 
                         {/* Profile Picture Icon */}
                         <div className={classes.loginContainer}>
                             {!this.state.isLoggedIn ?
 
-                                 /* User Not Logged in */
+                                /* User Not Logged in */
                                 <div className={classes.headerLoginBtn}>
                                     <Button variant="contained" color="default" startIcon={<AccountCircle />}
-                                        onClick={this.openModalHandler}>
+                                            onClick={this.openModalHandler}>
                                         Login
                                     </Button>
                                 </div>
@@ -583,16 +583,16 @@ class Header extends Component {
                                 // When User Logged in
                                 <div className={classes.customerProifleBtn}>
                                     <Button id="customer-profile" startIcon={<AccountCircle />}
-                                        onClick={this.onProfileIconClick}
+                                            onClick={this.onProfileIconClick}
                                     >
                                         {sessionStorage.getItem("first-name")}
                                     </Button>
 
                                     {/* Menu */}
                                     <Menu id="profile-menu" open={this.state.menuState} onClose={this.onMenuClose}
-                                        anchorEl={this.state.anchorEl} getContentAnchorEl={null}
-                                        anchorOrigin={{ vertical: "bottom", horizontal: "left" }} keepMounted>
-                                        
+                                          anchorEl={this.state.anchorEl} getContentAnchorEl={null}
+                                          anchorOrigin={{ vertical: "bottom", horizontal: "left" }} keepMounted>
+
                                         {/* Profile */}
                                         <MenuItem style={{ minHeight: 48 }}>
                                             <Typography>
@@ -601,12 +601,12 @@ class Header extends Component {
                                                     onClick={this.onMyProfile}>
                                                     My Profile
                                                 </Link></Typography></MenuItem>
-                                        
+
                                         {/* Logout */}
                                         <MenuItem style={{ minHeight: 48 }}>
                                             <Typography>
-                                                <Link to={"/"} style={{textDecoration: 'none',color: 'black'}} 
-                                                onClick={this.onLogout}>
+                                                <Link to={"/"} style={{ textDecoration: 'none', color: 'black' }}
+                                                      onClick={this.onLogout}>
                                                     Logout
                                                 </Link>
                                             </Typography>
@@ -643,8 +643,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="contactno">Contact No</InputLabel>
                                     <Input id="contactno" type="tel" contactno={this.state.contactno}
-                                        onChange={this.contactnoInputChangeHandler}
-                                        value={this.state.contactno}
+                                           onChange={this.contactnoInputChangeHandler}
+                                           value={this.state.contactno}
                                     />
                                     <FormHelperText className={this.state.isLoginContactnoError}>
                                         <span className='redError'>{this.state.loginContactnoErrorMeassage}</span>
@@ -655,13 +655,13 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="password">Password</InputLabel>
                                     <Input id="password" type="password" password={this.state.password}
-                                        onChange={this.passwordInputChangeHandler}
-                                        value={this.state.password}
+                                           onChange={this.passwordInputChangeHandler}
+                                           value={this.state.password}
                                     />
                                     <FormHelperText className={this.state.isloginPasswordError}>
                                         <span className='redError'>{this.state.loginPasswordErrorMessage}</span>
                                     </FormHelperText>
-                                    
+
                                     {/* Login Error on API call */}
                                     <FormHelperText className={this.state.loginErrorMessageRequired}>
                                         <span className='redError'>{this.state.loginErrorMessage}</span>
@@ -671,14 +671,14 @@ class Header extends Component {
 
                                 {/* Login Button */}
                                 <Button variant='contained' color='primary'
-                                    style={{ textAlign: 'center' }}
-                                    onClick={this.loginValidationHandler}
-                                    id="loginButton"
+                                        style={{ textAlign: 'center' }}
+                                        onClick={this.loginValidationHandler}
+                                        id="loginButton"
                                 >Login</Button>
                             </TabContainer>
 
                         }
-                        
+
                         {/* Sign Up Tab Container */}
                         {
                             this.state.value === 1 &&
@@ -688,8 +688,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="firstname">First Name</InputLabel>
                                     <Input id="firstname" type="text" firstname={this.state.firstname}
-                                        onChange={this.firstnameInputChangeHandler}
-                                        value={this.state.firstname}
+                                           onChange={this.firstnameInputChangeHandler}
+                                           value={this.state.firstname}
                                     />
                                     <FormHelperText className={this.state.firstnameRequired}>
                                         <span className="redError">required</span>
@@ -700,8 +700,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl}>
                                     <InputLabel htmlFor="lastname">Last Name</InputLabel>
                                     <Input id="lastname" type="text" lastname={this.state.lastname}
-                                        onChange={this.lastnameInputChangeHandler}
-                                        value={this.state.lastname}
+                                           onChange={this.lastnameInputChangeHandler}
+                                           value={this.state.lastname}
                                     />
                                 </FormControl><br /><br />
 
@@ -709,8 +709,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="email">Email</InputLabel>
                                     <Input id="email" type="email" email={this.state.email}
-                                        onChange={this.emailInputChangeHandler}
-                                        value={this.state.email}
+                                           onChange={this.emailInputChangeHandler}
+                                           value={this.state.email}
                                     />
                                     <FormHelperText className={this.state.isSignupEmailError}>
                                         <span className="redError" >{this.state.signupEmailErrorMessage}</span>
@@ -721,25 +721,25 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="passwordregister">Password</InputLabel>
                                     <Input id="passwordregister" type="password" passwordregister={this.state.passwordregister}
-                                        onChange={this.passwordRegisterInputChangeHandler}
-                                        value={this.state.passwordregister}
+                                           onChange={this.passwordRegisterInputChangeHandler}
+                                           value={this.state.passwordregister}
                                     />
                                     <FormHelperText className={this.state.isSignupPasswordError}>
                                         <span className="redError">{this.state.signupPasswordErrorMessage}</span>
                                     </FormHelperText>
                                 </FormControl><br /><br />
-                                
+
                                 {/* Contact No */}
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="contactNoSignup">Contact No</InputLabel>
                                     <Input id="contactNoSignup" type="tel" contactno={this.state.contactNoSignup}
-                                        onChange={this.contactNoSignupInputChangeHandler}
-                                        value={this.state.contactNoSignup}
+                                           onChange={this.contactNoSignupInputChangeHandler}
+                                           value={this.state.contactNoSignup}
                                     />
                                     <FormHelperText className={this.state.isSignupContactnoError}>
                                         <span className="redError">{this.state.signupContactnoErrorMessage}</span>
                                     </FormHelperText>
-                                    
+
                                     {/* SIgn Up error message on API call  */}
                                     <FormHelperText className={this.state.isSignUpError}>
                                         <span className='redError'>{this.state.signupErrorMessage}</span>
