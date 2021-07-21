@@ -16,6 +16,9 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Grid from "@material-ui/core/Grid";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
 
 import { Redirect } from 'react-router-dom';
 
@@ -28,6 +31,8 @@ class Checkout extends Component {
             activeTabValue: 'existing_address',
             addresses: [],
             selectedAddressId: undefined,
+            flat: '',
+            flatRequired: false,
         }
     }
 
@@ -138,6 +143,16 @@ class Checkout extends Component {
                                     </div>
                                     <div id='new-address-display'
                                         className={this.state.activeTabValue === 'new_address' ? 'display-block' : 'display-none'}>
+                                        <FormControl style={{ minWidth: 300 }}>
+                                            <InputLabel htmlFor='flat'>Flat/Building No</InputLabel>
+                                            <Input id='flat' name='flat' type='text' value={this.state.flat}
+                                                flat={this.state.flat}
+                                                onChange={this.onInputFieldChangeHandler} />
+                                            {this.state.flatRequired ? <FormHelperText>
+                                                <span style={{ color: "red" }}>required</span>
+                                            </FormHelperText> : null}
+                                        </FormControl>
+                                        <br />
                                     </div>
                                 </StepContent>
                             </Step>
