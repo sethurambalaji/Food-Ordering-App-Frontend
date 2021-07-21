@@ -22,7 +22,44 @@ class Checkout extends Component {
         this.state = {
             activeStep: 0,
             activeTabValue: 'existing_address',
+            addresses: [],
         }
+    }
+
+    componentDidMount() {
+        if (this.props.location.state !== undefined && sessionStorage.getItem('access-token') !== null) {
+            this.fetchAddress();
+        }
+    }
+
+    changeActiveTab = (value) => {
+        this.setState({ activeTabValue: value })
+        if (value === 'existing_address') {
+            this.fetchAddress();
+        }
+    }
+
+    fetchAddress = () => {
+        let token = sessionStorage.getItem('access-token');
+
+        let xhr = new XMLHttpRequest();
+
+        let that = this;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({ addresses: JSON.parse(this.responseText).addresses });
+            }
+        });
+
+        let url = this.props.baseUrl + 'address/customer';
+
+        xhr.open('GET', url);
+
+        xhr.setRequestHeader('authorization', 'Bearer ' + token);
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+
+        xhr.send();
     }
 
     render() {
@@ -47,6 +84,17 @@ class Checkout extends Component {
                                                 />
                                             </Tabs>
                                         </AppBar>
+                                    </div>
+                                    <div id='existing-address-display'
+                                        className={this.state.activeTabValue === 'existing_address' ? 'display-block' : 'display-none'}>
+                                        {
+                                            this.state.addresses === undefined || this.state.addresses.length === 0 ?
+                                                <Typography style={{ margin: 10, marginBottom: 200 }} color='textSecondary'
+                                                    component='p'>
+                                                    There are no saved addresses! You can save an address using the 'New
+                                                    Address' tab or using your ‘Profile’ menu option.
+                                                </Typography> : null
+                                        }
                                     </div>
                                 </StepContent>
                             </Step>
