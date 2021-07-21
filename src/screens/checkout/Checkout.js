@@ -40,6 +40,9 @@ class Checkout extends Component {
             cityRequired: false,
             stateUUID: '',
             stateUUIDRequired: false,
+            pincode: '',
+            pincodeRequired: false,
+            pincodeValid: true,
         }
     }
 
@@ -98,6 +101,40 @@ class Checkout extends Component {
         }
         if (elementId.startsWith('select-address-button-')) {
             this.setState({ selectedAddressId: elementId.split('select-address-button-')[1] })
+        }
+    }
+
+    onInputFieldChangeHandler = (e) => {
+        let stateKey = e.target.id;
+        let stateValue = e.target.value;
+        //Material UI Select doesn't return key
+        if (stateKey === undefined) {
+            stateKey = 'stateUUID';
+        }
+        //Form validation.
+        let stateValueRequiredKey = stateKey + 'Required';
+        let stateKeyRequiredValue = false;
+        if (stateValue === '') {
+            stateKeyRequiredValue = true;
+        }
+        let validPincode = this.state.pincodeValid;
+        if (stateKey === 'pincode') {
+            validPincode = this.validatePincode(stateValue);
+        }
+        this.setState({
+            [stateKey]: stateValue,
+            [stateValueRequiredKey]: stateKeyRequiredValue,
+            'pincodeValid': validPincode
+        });
+    }
+
+    validatePincode = (pincode) => {
+        if (pincode !== undefined && pincode.length !== 6) {
+            return false;
+        } else if (!isNaN(pincode) && pincode.length === 6) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -210,6 +247,29 @@ class Checkout extends Component {
                                             </FormHelperText> : null}
                                         </FormControl>
                                         <br />
+                                        <FormControl style={{ minWidth: 300 }}>
+                                            <InputLabel htmlFor='pincode'>Pincode</InputLabel>
+                                            <Input id='pincode' name='pincode' type='text' value={this.state.pincode}
+                                                pincode={this.state.pincode}
+                                                onChange={this.onInputFieldChangeHandler} />
+                                            {this.state.pincodeRequired ? <FormHelperText>
+                                                <span style={{ color: "red" }}>required</span>
+                                            </FormHelperText> : null}
+                                            {!this.state.pincodeRequired && !this.state.pincodeValid ? <FormHelperText>
+                                                <span style={{ color: "red" }}>Pincode must contain only numbers and must be 6 digits long</span>
+                                            </FormHelperText> : null}
+                                        </FormControl>
+                                        <br />
+                                        <br />
+                                        <FormControl style={{ minWidth: 150 }}>
+                                            <Button variant='contained' color='secondary' onClick={this.saveAddress}>SAVE
+                                                ADDRESS</Button>
+                                        </FormControl>
+                                    </div>
+                                    <div>
+                                        <Button style={{ margin: 5 }} disabled={this.state.activeStep === 0}>Back</Button>
+                                        <Button style={{ margin: 5 }} className='button' variant="contained" color="primary"
+                                            onClick={this.incrementActiveStep}>Next</Button>
                                     </div>
                                 </StepContent>
                             </Step>
