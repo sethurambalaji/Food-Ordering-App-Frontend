@@ -27,3 +27,26 @@
     border-bottom: 3px solid deeppink;
     border-radius: 5px;
 }
+
+.select-address-icon-container {
+    color: green;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.select-address-icon {
+    margin-right: 40px;
+}
+
+.display-green-icon {
+    color: rgba(0, 150, 0, 0.54);
+}
+
+.display-grey-icon {
+    color: rgba(0, 0, 0, 0.54);
+}
+
+#new-address-display{
+    margin-top: 10px;
+    margin-bottom: 15px;
+}

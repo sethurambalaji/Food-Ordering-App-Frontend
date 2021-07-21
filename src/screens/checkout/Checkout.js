@@ -135,6 +135,7 @@ class Checkout extends Component {
                                                 </GridList>
                                         }
                                     </div>
+
                                 </StepContent>
                             </Step>
                         </Stepper>
