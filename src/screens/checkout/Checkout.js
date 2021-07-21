@@ -59,6 +59,9 @@ class Checkout extends Component {
             pincodeValid: true,
             displayChange: 'display-none',
             paymentId: '',
+            placeOrderMessage: undefined,
+            placeOrderMessageOpen: false,
+            couponId: undefined,
         }
     }
 
@@ -260,6 +263,10 @@ class Checkout extends Component {
 
     resetActiveStep = () => {
         this.setState({ activeStep: 0, displayChange: 'display-none' })
+    }
+
+    placeOrderMessageClose = () => {
+        this.setState({ placeOrderMessageOpen: false });
     }
 
     render() {
