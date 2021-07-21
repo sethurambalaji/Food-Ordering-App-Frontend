@@ -19,7 +19,12 @@ import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
-
+import Typography from "@material-ui/core/Typography";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import { Redirect } from 'react-router-dom';
 
 class Checkout extends Component {
@@ -43,12 +48,14 @@ class Checkout extends Component {
             pincode: '',
             pincodeRequired: false,
             pincodeValid: true,
+            displayChange: 'display-none',
         }
     }
 
     componentDidMount() {
         if (this.props.location.state !== undefined && sessionStorage.getItem('access-token') !== null) {
             this.fetchAddress();
+            this.fetchStates();
         }
     }
 
@@ -56,7 +63,6 @@ class Checkout extends Component {
         this.setState({ activeTabValue: value })
         if (value === 'existing_address') {
             this.fetchAddress();
-            this.fetchStates();
         }
     }
 
@@ -135,6 +141,84 @@ class Checkout extends Component {
             return true;
         } else {
             return false;
+        }
+    }
+
+    saveAddress = () => {
+        let tempCityRequired = false;
+        let tempPincodeRequired = false;
+        let tempFlatRequired = false;
+        let tempStateRequired = false;
+        let tempLocalityRequired = false;
+        if (this.state.city === '' || this.state.cityRequired) {
+            tempCityRequired = true;
+        }
+        if (this.state.locality === '' || this.state.localityRequired) {
+            tempLocalityRequired = true;
+        }
+        if (this.state.flat === '' || this.state.flatRequired) {
+            tempFlatRequired = true;
+        }
+        if (this.state.stateUUID === '' || this.state.stateUUIDRequired) {
+            tempStateRequired = true;
+        }
+        if (this.state.pincode === '' || this.state.pincodeRequired) {
+            tempPincodeRequired = true;
+        }
+        if (tempFlatRequired || tempPincodeRequired || tempStateRequired || tempLocalityRequired || tempCityRequired) {
+            this.setState({
+                flatRequired: tempFlatRequired,
+                localityRequired: tempLocalityRequired,
+                cityRequired: tempCityRequired,
+                stateUUIDRequired: tempStateRequired,
+                pincodeRequired: tempPincodeRequired
+            })
+            return;
+        }
+
+        let address = {
+            city: this.state.city,
+            flat_building_name: this.state.flat,
+            locality: this.state.locality,
+            pincode: this.state.pincode,
+            state_uuid: this.state.stateUUID
+        }
+
+        let token = sessionStorage.getItem('access-token');
+        let xhr = new XMLHttpRequest();
+        let that = this;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({
+                    addresses: JSON.parse(this.responseText).addresses,
+                    city: '',
+                    locality: '',
+                    flat: '',
+                    stateUUID: '',
+                    pincode: ''
+                });
+            }
+        });
+
+        let url = this.props.baseUrl + 'address/';
+        xhr.open('POST', url);
+        xhr.setRequestHeader('authorization', 'Bearer ' + token);
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.setRequestHeader('content-type', 'application/json');
+        xhr.send(JSON.stringify(address));
+    }
+
+    incrementActiveStep = () => {
+        if (this.state.activeStep === 0 && this.state.selectedAddressId === undefined) {
+        } else if (this.state.activeStep === 1 && this.state.paymentId === '') {
+        } else {
+            let activeState = this.state.activeStep + 1;
+            let changeAddressPayment = 'display-none';
+            if (activeState === 2) {
+                changeAddressPayment = 'display-block';
+            }
+            this.setState({ activeStep: activeState, displayChange: changeAddressPayment })
         }
     }
 

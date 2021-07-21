@@ -50,3 +50,8 @@
     margin-top: 10px;
     margin-bottom: 15px;
 }
+
+.existing-address-grid-list {
+    flex-wrap: nowrap;
+    transform: translateZ(0);
+}
