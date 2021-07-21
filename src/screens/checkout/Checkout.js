@@ -12,6 +12,9 @@ import StepContent from "@material-ui/core/StepContent";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import AppBar from "@material-ui/core/AppBar";
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 import { Redirect } from 'react-router-dom';
 
@@ -23,6 +26,7 @@ class Checkout extends Component {
             activeStep: 0,
             activeTabValue: 'existing_address',
             addresses: [],
+            selectedAddressId: undefined,
         }
     }
 
@@ -41,9 +45,7 @@ class Checkout extends Component {
 
     fetchAddress = () => {
         let token = sessionStorage.getItem('access-token');
-
         let xhr = new XMLHttpRequest();
-
         let that = this;
 
         xhr.addEventListener("readystatechange", function () {
@@ -53,12 +55,9 @@ class Checkout extends Component {
         });
 
         let url = this.props.baseUrl + 'address/customer';
-
         xhr.open('GET', url);
-
         xhr.setRequestHeader('authorization', 'Bearer ' + token);
         xhr.setRequestHeader("Cache-Control", "no-cache");
-
         xhr.send();
     }
 
@@ -79,9 +78,9 @@ class Checkout extends Component {
                                         <AppBar position={"relative"}>
                                             <Tabs value={this.state.activeTabValue} variant='standard'>
                                                 <Tab value='existing_address' label='EXISTING ADDRESS'
-                                                />
+                                                    onClick={() => this.changeActiveTab('existing_address')} />
                                                 <Tab value='new_address' label='NEW ADDRESS'
-                                                />
+                                                    onClick={() => this.changeActiveTab('new_address')} />
                                             </Tabs>
                                         </AppBar>
                                     </div>
@@ -93,15 +92,44 @@ class Checkout extends Component {
                                                     component='p'>
                                                     There are no saved addresses! You can save an address using the 'New
                                                     Address' tab or using your ‘Profile’ menu option.
-                                                </Typography> : null
+                                                </Typography> :
+
+                                                <GridList style={{ flexWrap: 'nowrap' }} cols={3} cellHeight='auto'>
+                                                    {
+                                                        (this.state.addresses || []).map((address, index) => (
+                                                            <GridListTile key={address.id}
+                                                                className={this.state.selectedAddressId === address.id ? 'grid-list-tile-selected-address' : null}>
+                                                                <div className='address-box'>
+                                                                    <p>{address.flat_building_name}</p>
+                                                                    <p>{address.locality}</p>
+                                                                    <p>{address.city}</p>
+                                                                    <p>{address.state.state_name}</p>
+                                                                    <p>{address.pincode}</p>
+                                                                </div>
+                                                                <Grid container>
+                                                                    <Grid item xs={6} lg={10}></Grid>
+                                                                    <Grid item xs={2}>
+                                                                        <IconButton
+                                                                            id={'select-address-button-' + address.id}
+                                                                            className='select-address-icon'
+                                                                            <CheckCircleIcon
+                                                                        id={'select-address-icon-' + address.id}
+                                                                        className={this.state.selectedAddressId === address.id ? 'display-green-icon' : 'display-grey-icon'} />
+                                                                        </IconButton>
+                                                                </Grid>
+                                                                </Grid>
+                                                            </GridListTile>
+                                                        ))
+                                                    }
+                                                </GridList>
                                         }
                                     </div>
                                 </StepContent>
                             </Step>
                         </Stepper>
-                    </div>
                 </div>
-            </Fragment>
+                </div>
+            </Fragment >
         )
     }
 }
