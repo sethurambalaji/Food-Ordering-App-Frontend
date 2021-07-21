@@ -25,6 +25,10 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormLabel from "@material-ui/core/FormLabel";
+import Radio from "@material-ui/core/Radio";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Redirect } from 'react-router-dom';
 
 class Checkout extends Component {
@@ -36,6 +40,7 @@ class Checkout extends Component {
             activeTabValue: 'existing_address',
             addresses: [],
             states: [],
+            payments: [],
             selectedAddressId: undefined,
             flat: '',
             flatRequired: false,
@@ -49,6 +54,7 @@ class Checkout extends Component {
             pincodeRequired: false,
             pincodeValid: true,
             displayChange: 'display-none',
+            paymentId: '',
         }
     }
 
@@ -56,6 +62,7 @@ class Checkout extends Component {
         if (this.props.location.state !== undefined && sessionStorage.getItem('access-token') !== null) {
             this.fetchAddress();
             this.fetchStates();
+            this.fetchPayments();
         }
     }
 
@@ -95,6 +102,22 @@ class Checkout extends Component {
         });
 
         let url = this.props.baseUrl + 'states/';
+        xhr.open('GET', url);
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.send();
+    }
+
+    fetchPayments = () => {
+        let xhr = new XMLHttpRequest();
+        let that = this;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({ payments: JSON.parse(this.responseText).paymentMethods });
+            }
+        });
+
+        let url = this.props.baseUrl + 'payment';
         xhr.open('GET', url);
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.send();
@@ -220,6 +243,19 @@ class Checkout extends Component {
             }
             this.setState({ activeStep: activeState, displayChange: changeAddressPayment })
         }
+    }
+
+    decrementActiveStep = () => {
+        let activeState = this.state.activeStep - 1;
+        this.setState({ activeStep: activeState })
+    }
+
+    onPaymentSelection = (e) => {
+        this.setState({ 'paymentId': e.target.value });
+    }
+
+    resetActiveStep = () => {
+        this.setState({ activeStep: 0, displayChange: 'display-none' })
     }
 
     render() {
@@ -357,7 +393,32 @@ class Checkout extends Component {
                                     </div>
                                 </StepContent>
                             </Step>
+                            <Step key='Payment'>
+                                <StepLabel>Payment</StepLabel>
+                                <StepContent>
+                                    <div id='payment-modes'>
+                                        <FormControl>
+                                            <FormLabel>Select Mode of Payment</FormLabel>
+                                            <RadioGroup onChange={this.onPaymentSelection} value={this.state.paymentId}>
+                                                {(this.state.payments || []).map((payment, index) => (
+                                                    <FormControlLabel key={payment.id} value={payment.id} control={<Radio />}
+                                                        label={payment.payment_name} />
+                                                ))}
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
+                                    <Button style={{ margin: 5 }} onClick={this.decrementActiveStep}>Back</Button>
+                                    <Button style={{ margin: 5 }} variant="contained" color="primary"
+                                        onClick={this.incrementActiveStep}>Finish</Button>
+                                </StepContent>
+                            </Step>
                         </Stepper>
+                        <div className={this.state.displayChange}>
+                            <Typography style={{ marginLeft: 40 }} variant='h5'>
+                                View the summary and place your order now!
+                            </Typography>
+                            <Button style={{ marginLeft: 40, marginTop: 20 }} onClick={this.resetActiveStep}>CHANGE</Button>
+                        </div>
                     </div>
                 </div>
             </Fragment>
