@@ -61,6 +61,16 @@ class Checkout extends Component {
         xhr.send();
     }
 
+    selectAddress = (e) => {
+        let elementId = e.target.id;
+        if (elementId.startsWith('select-address-icon-')) {
+            this.setState({ selectedAddressId: elementId.split('select-address-icon-')[1] });
+        }
+        if (elementId.startsWith('select-address-button-')) {
+            this.setState({ selectedAddressId: elementId.split('select-address-button-')[1] })
+        }
+    }
+
     render() {
         if (this.props.location.state === undefined || sessionStorage.getItem('access-token') === null) {
             return <Redirect to='/' />
@@ -112,11 +122,12 @@ class Checkout extends Component {
                                                                         <IconButton
                                                                             id={'select-address-button-' + address.id}
                                                                             className='select-address-icon'
+                                                                            onClick={this.selectAddress}>
                                                                             <CheckCircleIcon
-                                                                        id={'select-address-icon-' + address.id}
-                                                                        className={this.state.selectedAddressId === address.id ? 'display-green-icon' : 'display-grey-icon'} />
+                                                                                id={'select-address-icon-' + address.id}
+                                                                                className={this.state.selectedAddressId === address.id ? 'display-green-icon' : 'display-grey-icon'} />
                                                                         </IconButton>
-                                                                </Grid>
+                                                                    </Grid>
                                                                 </Grid>
                                                             </GridListTile>
                                                         ))
@@ -127,9 +138,9 @@ class Checkout extends Component {
                                 </StepContent>
                             </Step>
                         </Stepper>
+                    </div>
                 </div>
-                </div>
-            </Fragment >
+            </Fragment>
         )
     }
 }
