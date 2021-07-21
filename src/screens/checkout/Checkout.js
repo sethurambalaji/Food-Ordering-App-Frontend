@@ -15,6 +15,7 @@ import AppBar from "@material-ui/core/AppBar";
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import Grid from "@material-ui/core/Grid";
 
 import { Redirect } from 'react-router-dom';
 
@@ -135,7 +136,9 @@ class Checkout extends Component {
                                                 </GridList>
                                         }
                                     </div>
-
+                                    <div id='new-address-display'
+                                        className={this.state.activeTabValue === 'new_address' ? 'display-block' : 'display-none'}>
+                                    </div>
                                 </StepContent>
                             </Step>
                         </Stepper>
