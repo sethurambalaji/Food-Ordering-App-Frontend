@@ -33,6 +33,12 @@ class Checkout extends Component {
             selectedAddressId: undefined,
             flat: '',
             flatRequired: false,
+            locality: '',
+            localityRequired: false,
+            city: '',
+            cityRequired: false,
+            stateUUID: '',
+            stateUUIDRequired: false,
         }
     }
 
@@ -149,6 +155,39 @@ class Checkout extends Component {
                                                 flat={this.state.flat}
                                                 onChange={this.onInputFieldChangeHandler} />
                                             {this.state.flatRequired ? <FormHelperText>
+                                                <span style={{ color: "red" }}>required</span>
+                                            </FormHelperText> : null}
+                                        </FormControl>
+                                        <br />
+                                        <FormControl style={{ minWidth: 300 }}>
+                                            <InputLabel htmlFor='locality'>Locality</InputLabel>
+                                            <Input id='locality' name='locality' type='text' value={this.state.locality}
+                                                locality={this.state.locality}
+                                                onChange={this.onInputFieldChangeHandler} />
+                                            {this.state.localityRequired ? <FormHelperText>
+                                                <span style={{ color: "red" }}>required</span>
+                                            </FormHelperText> : null}
+                                        </FormControl>
+                                        <br />
+                                        <FormControl style={{ minWidth: 300 }}>
+                                            <InputLabel htmlFor='city'>City</InputLabel>
+                                            <Input id='city' name='city' type='text' value={this.state.city}
+                                                city={this.state.city}
+                                                onChange={this.onInputFieldChangeHandler} />
+                                            {this.state.cityRequired ? <FormHelperText>
+                                                <span style={{ color: "red" }}>required</span>
+                                            </FormHelperText> : null}
+                                        </FormControl>
+                                        <br />
+                                        <FormControl style={{ minWidth: 300 }}>
+                                            <InputLabel htmlFor='stateUUID'>State</InputLabel>
+                                            <Select id='stateUUID' name='stateUUID' value={this.state.stateUUID}
+                                                onChange={this.onInputFieldChangeHandler}>
+                                                {this.state.states.map((state, index) => (
+                                                    <MenuItem key={state.id} value={state.id}>{state.state_name}</MenuItem>
+                                                ))}
+                                            </Select>
+                                            {this.state.stateUUIDRequired ? <FormHelperText>
                                                 <span style={{ color: "red" }}>required</span>
                                             </FormHelperText> : null}
                                         </FormControl>
