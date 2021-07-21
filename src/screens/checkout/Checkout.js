@@ -30,6 +30,7 @@ class Checkout extends Component {
             activeStep: 0,
             activeTabValue: 'existing_address',
             addresses: [],
+            states: [],
             selectedAddressId: undefined,
             flat: '',
             flatRequired: false,
@@ -52,6 +53,7 @@ class Checkout extends Component {
         this.setState({ activeTabValue: value })
         if (value === 'existing_address') {
             this.fetchAddress();
+            this.fetchStates();
         }
     }
 
@@ -69,6 +71,22 @@ class Checkout extends Component {
         let url = this.props.baseUrl + 'address/customer';
         xhr.open('GET', url);
         xhr.setRequestHeader('authorization', 'Bearer ' + token);
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.send();
+    }
+
+    fetchStates = () => {
+        let xhr = new XMLHttpRequest();
+        let that = this;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({ states: JSON.parse(this.responseText).states });
+            }
+        });
+
+        let url = this.props.baseUrl + 'states/';
+        xhr.open('GET', url);
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.send();
     }
