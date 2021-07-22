@@ -238,36 +238,6 @@ class Checkout extends Component {
         xhr.send(JSON.stringify(address));
     }
 
-    incrementActiveStep = () => {
-        if (this.state.activeStep === 0 && this.state.selectedAddressId === undefined) {
-        } else if (this.state.activeStep === 1 && this.state.paymentId === '') {
-        } else {
-            let activeState = this.state.activeStep + 1;
-            let changeAddressPayment = 'display-none';
-            if (activeState === 2) {
-                changeAddressPayment = 'display-block';
-            }
-            this.setState({ activeStep: activeState, displayChange: changeAddressPayment })
-        }
-    }
-
-    decrementActiveStep = () => {
-        let activeState = this.state.activeStep - 1;
-        this.setState({ activeStep: activeState })
-    }
-
-    onPaymentSelection = (e) => {
-        this.setState({ 'paymentId': e.target.value });
-    }
-
-    resetActiveStep = () => {
-        this.setState({ activeStep: 0, displayChange: 'display-none' })
-    }
-
-    placeOrderMessageClose = () => {
-        this.setState({ placeOrderMessageOpen: false });
-    }
-
     placeOrder = () => {
         if (this.state.selectedAddressId === '' || this.state.selectedAddressId === undefined || this.state.paymentId === '' || this.state.paymentId === undefined || this.state.displayChange === 'display-none') {
             this.setState({
@@ -320,6 +290,36 @@ class Checkout extends Component {
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.setRequestHeader('content-type', 'application/json');
         xhr.send(JSON.stringify(order));
+    }
+
+    incrementActiveStep = () => {
+        if (this.state.activeStep === 0 && this.state.selectedAddressId === undefined) {
+        } else if (this.state.activeStep === 1 && this.state.paymentId === '') {
+        } else {
+            let activeState = this.state.activeStep + 1;
+            let changeAddressPayment = 'display-none';
+            if (activeState === 2) {
+                changeAddressPayment = 'display-block';
+            }
+            this.setState({ activeStep: activeState, displayChange: changeAddressPayment })
+        }
+    }
+
+    decrementActiveStep = () => {
+        let activeState = this.state.activeStep - 1;
+        this.setState({ activeStep: activeState })
+    }
+
+    onPaymentSelection = (e) => {
+        this.setState({ 'paymentId': e.target.value });
+    }
+
+    resetActiveStep = () => {
+        this.setState({ activeStep: 0, displayChange: 'display-none' })
+    }
+
+    placeOrderMessageClose = () => {
+        this.setState({ placeOrderMessageOpen: false });
     }
 
     render() {
