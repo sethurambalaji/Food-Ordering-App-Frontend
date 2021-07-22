@@ -539,7 +539,7 @@ class Header extends Component {
                         {/* Logo */}
                         <div className={classes.logoContainer}>
                             <IconButton disableRipple={true} edge="start" color="inherit"
-                                        aria-label="app logo">
+                                aria-label="app logo">
                                 <FastfoodIcon />
                             </IconButton>
                         </div>
@@ -550,17 +550,17 @@ class Header extends Component {
                                 <ThemeProvider theme={theme}>
                                     <InputLabel htmlFor="search-box-input" />
                                     <Input id="search-box-input"
-                                           startAdornment={
-                                               <InputAdornment position="start">
-                                                   <SearchIcon />
-                                               </InputAdornment>
-                                           }
-                                           placeholder="Search by Restaurant Name"
-                                           classes={{
-                                               root: classes.inputRoot,
-                                               input: classes.inputInput,
-                                           }}
-                                           onChange={this.props.searchHandler}
+                                        startAdornment={
+                                            <InputAdornment position="start">
+                                                <SearchIcon />
+                                            </InputAdornment>
+                                        }
+                                        placeholder="Search by Restaurant Name"
+                                        classes={{
+                                            root: classes.inputRoot,
+                                            input: classes.inputInput,
+                                        }}
+                                        onChange={this.props.searchHandler}
                                     />
                                 </ThemeProvider>
                             </div>
@@ -574,7 +574,7 @@ class Header extends Component {
                                 /* User Not Logged in */
                                 <div className={classes.headerLoginBtn}>
                                     <Button variant="contained" color="default" startIcon={<AccountCircle />}
-                                            onClick={this.openModalHandler}>
+                                        onClick={this.openModalHandler}>
                                         Login
                                     </Button>
                                 </div>
@@ -583,15 +583,15 @@ class Header extends Component {
                                 // When User Logged in
                                 <div className={classes.customerProifleBtn}>
                                     <Button id="customer-profile" startIcon={<AccountCircle />}
-                                            onClick={this.onProfileIconClick}
+                                        onClick={this.onProfileIconClick}
                                     >
                                         {sessionStorage.getItem("first-name")}
                                     </Button>
 
                                     {/* Menu */}
                                     <Menu id="profile-menu" open={this.state.menuState} onClose={this.onMenuClose}
-                                          anchorEl={this.state.anchorEl} getContentAnchorEl={null}
-                                          anchorOrigin={{ vertical: "bottom", horizontal: "left" }} keepMounted>
+                                        anchorEl={this.state.anchorEl} getContentAnchorEl={null}
+                                        anchorOrigin={{ vertical: "bottom", horizontal: "left" }} keepMounted>
 
                                         {/* Profile */}
                                         <MenuItem style={{ minHeight: 48 }}>
@@ -606,7 +606,7 @@ class Header extends Component {
                                         <MenuItem style={{ minHeight: 48 }}>
                                             <Typography>
                                                 <Link to={"/"} style={{ textDecoration: 'none', color: 'black' }}
-                                                      onClick={this.onLogout}>
+                                                    onClick={this.onLogout}>
                                                     Logout
                                                 </Link>
                                             </Typography>
@@ -643,8 +643,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="contactno">Contact No</InputLabel>
                                     <Input id="contactno" type="tel" contactno={this.state.contactno}
-                                           onChange={this.contactnoInputChangeHandler}
-                                           value={this.state.contactno}
+                                        onChange={this.contactnoInputChangeHandler}
+                                        value={this.state.contactno}
                                     />
                                     <FormHelperText className={this.state.isLoginContactnoError}>
                                         <span className='redError'>{this.state.loginContactnoErrorMeassage}</span>
@@ -655,8 +655,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="password">Password</InputLabel>
                                     <Input id="password" type="password" password={this.state.password}
-                                           onChange={this.passwordInputChangeHandler}
-                                           value={this.state.password}
+                                        onChange={this.passwordInputChangeHandler}
+                                        value={this.state.password}
                                     />
                                     <FormHelperText className={this.state.isloginPasswordError}>
                                         <span className='redError'>{this.state.loginPasswordErrorMessage}</span>
@@ -671,9 +671,9 @@ class Header extends Component {
 
                                 {/* Login Button */}
                                 <Button variant='contained' color='primary'
-                                        style={{ textAlign: 'center' }}
-                                        onClick={this.loginValidationHandler}
-                                        id="loginButton"
+                                    style={{ textAlign: 'center' }}
+                                    onClick={this.loginValidationHandler}
+                                    id="loginButton"
                                 >Login</Button>
                             </TabContainer>
 
@@ -688,8 +688,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="firstname">First Name</InputLabel>
                                     <Input id="firstname" type="text" firstname={this.state.firstname}
-                                           onChange={this.firstnameInputChangeHandler}
-                                           value={this.state.firstname}
+                                        onChange={this.firstnameInputChangeHandler}
+                                        value={this.state.firstname}
                                     />
                                     <FormHelperText className={this.state.firstnameRequired}>
                                         <span className="redError">required</span>
@@ -700,8 +700,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl}>
                                     <InputLabel htmlFor="lastname">Last Name</InputLabel>
                                     <Input id="lastname" type="text" lastname={this.state.lastname}
-                                           onChange={this.lastnameInputChangeHandler}
-                                           value={this.state.lastname}
+                                        onChange={this.lastnameInputChangeHandler}
+                                        value={this.state.lastname}
                                     />
                                 </FormControl><br /><br />
 
@@ -709,8 +709,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="email">Email</InputLabel>
                                     <Input id="email" type="email" email={this.state.email}
-                                           onChange={this.emailInputChangeHandler}
-                                           value={this.state.email}
+                                        onChange={this.emailInputChangeHandler}
+                                        value={this.state.email}
                                     />
                                     <FormHelperText className={this.state.isSignupEmailError}>
                                         <span className="redError" >{this.state.signupEmailErrorMessage}</span>
@@ -721,8 +721,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="passwordregister">Password</InputLabel>
                                     <Input id="passwordregister" type="password" passwordregister={this.state.passwordregister}
-                                           onChange={this.passwordRegisterInputChangeHandler}
-                                           value={this.state.passwordregister}
+                                        onChange={this.passwordRegisterInputChangeHandler}
+                                        value={this.state.passwordregister}
                                     />
                                     <FormHelperText className={this.state.isSignupPasswordError}>
                                         <span className="redError">{this.state.signupPasswordErrorMessage}</span>
@@ -733,8 +733,8 @@ class Header extends Component {
                                 <FormControl className={classes.FormControl} required>
                                     <InputLabel htmlFor="contactNoSignup">Contact No</InputLabel>
                                     <Input id="contactNoSignup" type="tel" contactno={this.state.contactNoSignup}
-                                           onChange={this.contactNoSignupInputChangeHandler}
-                                           value={this.state.contactNoSignup}
+                                        onChange={this.contactNoSignupInputChangeHandler}
+                                        value={this.state.contactNoSignup}
                                     />
                                     <FormHelperText className={this.state.isSignupContactnoError}>
                                         <span className="redError">{this.state.signupContactnoErrorMessage}</span>
