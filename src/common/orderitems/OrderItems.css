@@ -1,29 +1,30 @@
+/* Set Css Styles For Order Item Summary Section:-*/
+
 .icon-type {
-    margin-top: 5px;
+	margin-top: 5px;
 }
 
 .item-name {
-    text-align: left;
-    min-width: 50%;
+	text-align: left;
+	min-width: 50%;
 }
 
 .quantity {
-    min-width: 20%;
+	min-width: 20%;
 }
 
 .amount {
-    width: 247px;
-    display: inline-block;
+	width: 247px;
+	display: inline-block;
 }
 
 .payable-bill-amount {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 20px;
-    margin-right: 20px;
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 20px;
+	margin-right: 20px;
 }
 
 .place-order-button {
-    width: 100%;
+	width: 100%;
 }
-

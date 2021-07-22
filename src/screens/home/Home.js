@@ -34,6 +34,7 @@ const styles = theme => ({
     }
 });
 
+//Home Section UI
 class Home extends Component {
 
     constructor() {

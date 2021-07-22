@@ -34,6 +34,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import OrderItems from "../../common/orderitems/OrderItems";
 import { Redirect } from 'react-router-dom';
 
+//Checkout Section UI
 class Checkout extends Component {
 
     constructor() {
@@ -64,6 +65,7 @@ class Checkout extends Component {
         }
     }
 
+    //Fetch Data Before Component
     componentDidMount() {
         if (this.props.location.state !== undefined && sessionStorage.getItem('access-token') !== null) {
             this.fetchAddress();
@@ -72,6 +74,7 @@ class Checkout extends Component {
         }
     }
 
+    //Switch Tab
     changeActiveTab = (value) => {
         this.setState({ activeTabValue: value })
         if (value === 'existing_address') {
@@ -79,6 +82,7 @@ class Checkout extends Component {
         }
     }
 
+    //Fetch Address Using AJAX Call
     fetchAddress = () => {
         let token = sessionStorage.getItem('access-token');
         let xhr = new XMLHttpRequest();
@@ -97,6 +101,7 @@ class Checkout extends Component {
         xhr.send();
     }
 
+    //Fetch State Using AJAX Call
     fetchStates = () => {
         let xhr = new XMLHttpRequest();
         let that = this;
@@ -113,6 +118,7 @@ class Checkout extends Component {
         xhr.send();
     }
 
+    //Fetch Payment Modes Using AJAX Call
     fetchPayments = () => {
         let xhr = new XMLHttpRequest();
         let that = this;
@@ -129,6 +135,7 @@ class Checkout extends Component {
         xhr.send();
     }
 
+    //Select Address From Existing Address Tab
     selectAddress = (e) => {
         let elementId = e.target.id;
         if (elementId.startsWith('select-address-icon-')) {
@@ -139,6 +146,7 @@ class Checkout extends Component {
         }
     }
 
+    //Input Field Handler
     onInputFieldChangeHandler = (e) => {
         let stateKey = e.target.id;
         let stateValue = e.target.value;
@@ -163,6 +171,7 @@ class Checkout extends Component {
         });
     }
 
+    //Pincode Validation
     validatePincode = (pincode) => {
         if (pincode !== undefined && pincode.length !== 6) {
             return false;
@@ -173,6 +182,7 @@ class Checkout extends Component {
         }
     }
 
+    // Save Address Using AJAX Calls 
     saveAddress = () => {
         let tempCityRequired = false;
         let tempPincodeRequired = false;
@@ -217,6 +227,7 @@ class Checkout extends Component {
         let xhr = new XMLHttpRequest();
         let that = this;
 
+        // Post Address Inside 'restaurantdb'
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
@@ -238,6 +249,7 @@ class Checkout extends Component {
         xhr.send(JSON.stringify(address));
     }
 
+    // Place Address Using AJAX Call Inside 'restaurantdb'
     placeOrder = () => {
         if (this.state.selectedAddressId === '' || this.state.selectedAddressId === undefined || this.state.paymentId === '' || this.state.paymentId === undefined || this.state.displayChange === 'display-none') {
             this.setState({
@@ -265,6 +277,7 @@ class Checkout extends Component {
         let xhr = new XMLHttpRequest();
         let that = this;
 
+        //Show Snackbar And Message Based On Place Order Success,Failure
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 if (this.status === 201) {
@@ -292,6 +305,7 @@ class Checkout extends Component {
         xhr.send(JSON.stringify(order));
     }
 
+    //Switch To Next Step Inside Stepper Component
     incrementActiveStep = () => {
         if (this.state.activeStep === 0 && this.state.selectedAddressId === undefined) {
         } else if (this.state.activeStep === 1 && this.state.paymentId === '') {
@@ -305,23 +319,28 @@ class Checkout extends Component {
         }
     }
 
+    //Goes Back To Previous Step Inside Stepper Component
     decrementActiveStep = () => {
         let activeState = this.state.activeStep - 1;
         this.setState({ activeStep: activeState })
     }
 
+    //Payment Handler
     onPaymentSelection = (e) => {
         this.setState({ 'paymentId': e.target.value });
     }
 
+    //Reset Stepper Step
     resetActiveStep = () => {
         this.setState({ activeStep: 0, displayChange: 'display-none' })
     }
 
+    //Close Place Order Snackbar
     placeOrderMessageClose = () => {
         this.setState({ placeOrderMessageOpen: false });
     }
 
+    // Stepper Component And Order Summary Section
     render() {
         if (this.props.location.state === undefined || sessionStorage.getItem('access-token') === null) {
             return <Redirect to='/' />

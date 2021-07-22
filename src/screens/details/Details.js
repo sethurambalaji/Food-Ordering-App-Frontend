@@ -22,6 +22,7 @@ import Grid from "@material-ui/core/Grid";
 
 import "../../assets/font-awesome-4.7.0/css/font-awesome.min.css";
 
+//Details Section UI
 class Details extends Component {
 
     constructor() {
@@ -114,7 +115,6 @@ class Details extends Component {
         newItem.priceForAll = price;
 
         this.setState({ cartItem: newItem });
-
         totalAmount += price;
 
         if (this.state.orderItems.items !== undefined && this.state.orderItems.items.some(item => (item.name === name))) {
@@ -127,21 +127,15 @@ class Details extends Component {
             this.setState(item);
 
         } else {
-
             this.state.cartItems.push(this.state.cartItem);
             this.setState({ cartItem: {} });
-
-
             const orderItems = this.state.orderItems;
             orderItems.items = this.state.cartItems;
             this.setState({ orderItems: orderItems });
         }
-
         this.setState({ open: true });
         this.setState({ totalItems: totalItems });
         this.setState({ totalAmount: totalAmount });
-
-
     }
     /**
      * This function is called when an item is removed from the cart.
@@ -165,27 +159,19 @@ class Details extends Component {
             this.setState({ itemQuantityDecreased: true });
 
         } else {
-
             this.state.orderItems.items.splice(index, 1);
             this.setState({ itemRemovedFromCart: true });
-
         }
-
-
         var totalAmount = this.state.totalAmount;
         totalAmount -= price;
         var totalItems = this.state.totalItems;
         totalItems -= 1;
-
         this.setState({ totalItems: totalItems });
         this.setState({ totalAmount: totalAmount });
-
     }
-
 
     addAnItemFromCartHandler = (item, index) => {
         const itemIndex = this.getIndex(item.name, this.state.orderItems.items, "name");
-
         var quantity = this.state.orderItems.items[itemIndex].quantity + 1;
         var priceForAll = this.state.orderItems.items[itemIndex].priceForAll + this.state.orderItems.items[itemIndex].pricePerItem;
         var itemAdded = this.state.orderItems.items[itemIndex];
@@ -242,14 +228,8 @@ class Details extends Component {
         return pascalCasedString
     }
 
-
-
-
-
-
     render() {
         return (
-
             <div><Header baseUrl={this.props.baseUrl} />
                 {this.state.text}
                 <div className="main-container-body">

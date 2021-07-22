@@ -26,9 +26,7 @@ import { Typography } from '@material-ui/core';
 import { createTheme } from '@material-ui/core/styles';
 import validator from 'validator'
 
-
 const styles = theme => ({
-
     grow: {
         flexGrow: 1,
     },
@@ -77,18 +75,14 @@ const styles = theme => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
     paper: {
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
-
     FormControl: {
-
         minWidth: '-webkit-fill-available',
-
     },
     customerProifleBtn: {
         color: 'grey',
@@ -109,9 +103,6 @@ const theme = createTheme({
     }
 });
 
-
-
-
 // Tab container inside the modal
 const TabContainer = function (props) {
     return (
@@ -121,6 +112,7 @@ const TabContainer = function (props) {
     )
 }
 
+// Set Tab Container Required Prototypes
 TabContainer.propTypes = {
     children: PropTypes.node.isRequired
 }
@@ -137,8 +129,7 @@ const customStyles = {
     }
 };
 
-
-
+// Header Section UI
 class Header extends Component {
 
     constructor() {
@@ -174,7 +165,6 @@ class Header extends Component {
 
             isSignupContactnoError: "dispNone",
 
-
             openSnackBar: false,
 
             isLoginError: false,
@@ -185,7 +175,6 @@ class Header extends Component {
 
             signupErrorMessage: "",
             isSignUpError: "dispNone",
-
 
             menuState: false,
             anchorEl: null,
@@ -210,8 +199,8 @@ class Header extends Component {
             isModalOpen: false,
             value: 0
         })
-        this.resetLoginForm();
-        this.resetSignupForm();
+        this.resetLoginForm(); // Clear Login Form Fields
+        this.resetSignupForm(); // Clear Signup Form Fields
 
     }
 
@@ -408,7 +397,6 @@ class Header extends Component {
         if (reason === 'clickaway') {
             return;
         }
-
         this.setState({ openSnackBar: false });
     };
 
@@ -497,7 +485,6 @@ class Header extends Component {
         e.preventDefault();
     }
 
-
     //Profile icon click handler
     onProfileIconClick = (e) => {
         this.setState({ 'menuState': !this.state.menuState, 'anchorEl': e.currentTarget });
@@ -526,11 +513,8 @@ class Header extends Component {
         this.onMenuClose();
     }
 
-
-
     render() {
         const { classes } = this.props;
-
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.appBar}>

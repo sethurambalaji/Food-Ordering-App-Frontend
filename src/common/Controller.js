@@ -10,7 +10,7 @@ import Checkout from "../screens/checkout/Checkout";
 import Profile from '../screens/profile/Profile';
 
 /**
- * This class represents the whole FoodOrdering Application.
+ * This class represents the whole FoodOrdering Application Routing And Components.
  */
 class Controller extends Component {
     constructor() {
