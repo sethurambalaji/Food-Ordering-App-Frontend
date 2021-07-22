@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import FoodOrdering from './FoodOrdering';
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
-import Controller from './common/Controller'
+import Controller from './common/Controller';
 
 ReactDOM.render(
     <Router>
-        <FoodOrdering />
+        <Controller />
     </Router>,
     document.getElementById('root')
 );
