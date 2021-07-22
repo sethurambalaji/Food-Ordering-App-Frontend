@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Profile.css';
 
+// Profile Section UI
 class Profile extends Component {
     render() {
         return (
