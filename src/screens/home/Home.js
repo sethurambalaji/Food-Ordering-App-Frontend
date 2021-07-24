@@ -14,8 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 import { Redirect } from 'react-router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 //importing the css file of the Home page
 import './Home.css';
 
@@ -178,13 +177,13 @@ class Home extends Component {
                                                         {/* restaurant rating */}
                                                         <div className="restaurant-rating-div">
                                                             <Typography variant='body1'>
-                                                                <FontAwesomeIcon icon="star" /> {restaurant.customer_rating} ({restaurant.number_customers_rated})
+                                                                <FontAwesomeIcon icon="fa-solid fa-star" /> {restaurant.customer_rating} ({restaurant.number_customers_rated})
                                                             </Typography>
                                                         </div>
                                                         {/* restaurant average price */}
                                                         <div className="restaurant-avg-price-div">
                                                             <Typography variant='body1'>
-                                                                <FontAwesomeIcon icon="inr" /> {restaurant.average_price} for two
+                                                                <FontAwesomeIcon icon="fa-solid fa-indian-rupee-sign"/> {restaurant.average_price} for two
                                                             </Typography>
                                                         </div>
                                                     </div>
