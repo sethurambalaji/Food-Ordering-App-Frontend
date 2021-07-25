@@ -377,14 +377,14 @@ class Details extends Component {
                                                                     <IconButton className='add-remove-button-hover'
                                                                         style={{ display: "flex", padding: 0 }}
                                                                         onClick={(e) => this.removeFromCartHandler(e, item.id, item.type, item.name, item.pricePerItem)}><RemoveIcon
-                                                                            fontSize='default'
+                                                                            fontSize='medium'
                                                                             style={{ color: 'black', fontWeight: "bolder" }} /></IconButton>
                                                                     <Typography
                                                                         style={{ fontWeight: 'bold' }}>{item.quantity}</Typography>
                                                                     <IconButton className='add-remove-button-hover'
                                                                         style={{ display: "flex", padding: 0 }}
                                                                         onClick={this.addAnItemFromCartHandler.bind(this, item, index)}>
-                                                                        <AddIcon fontSize='default' style={{
+                                                                        <AddIcon fontSize='medium' style={{
                                                                             color: 'black',
                                                                             fontWeight: "bolder"
                                                                         }} /></IconButton>
