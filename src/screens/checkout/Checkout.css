@@ -75,6 +75,7 @@
 	margin: 0px;
 }
 
+/* Set MediaQueries To Make Page Responsive */
 @media (min-width: 320px) and (max-width: 900px) {
 	.main-container {
 		height: 100vh;
@@ -91,6 +92,7 @@
 	}
 }
 
+/* Set MediaQueries To Make Page Responsive */
 @media (min-width: 900px) and (max-width: 1400px) {
 	.delivery-payment-section {
 		width: 58%;
