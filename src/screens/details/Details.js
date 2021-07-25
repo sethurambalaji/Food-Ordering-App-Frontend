@@ -21,7 +21,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from "@material-ui/core/Grid";
 
 import "../../assets/font-awesome-4.7.0/css/font-awesome.min.css";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //Details Section UI
 class Details extends Component {
 
@@ -260,11 +260,9 @@ class Details extends Component {
                             </div>
                             <div className="rating-section">
                                 <div className="rating-section-left">
-                                    <i className="fa fa-star" aria-hidden="true" style={{
-                                        paddingRight: "3px",
-                                        paddingBottom: "3px",
-                                        paddingLeft: "2px"
-                                    }}></i>{this.state.customer_rating}
+                                    <FontAwesomeIcon icon="fa-solid fa-star"
+                                                     className="icon-03"/>
+                                    {this.state.customer_rating}
                                     <div style={{ color: "gray", fontSize: "12px" }}>AVERAGE RATING BY</div>
                                     <div style={{
                                         color: "gray",
@@ -273,10 +271,9 @@ class Details extends Component {
                                     </div>
                                 </div>
                                 <div className="rating-section-right">
-                                    <i className="fa fa-inr" aria-hidden="true" style={{
-                                        paddingRight: "4px", paddingBottom: "3px",
-                                        paddingLeft: "2px"
-                                    }}></i>{this.state.average_price}
+                                    <FontAwesomeIcon icon="fa-solid fa-indian-rupee-sign"
+                                                     className="icon-02"/>
+                                    {this.state.average_price}
                                     <div style={{ color: "gray", fontSize: "12px" }}>AVERAGE COST FOR</div>
                                     <div style={{ color: "gray", fontSize: "12px" }}>TWO PEOPLE</div>
                                 </div>
@@ -313,7 +310,7 @@ class Details extends Component {
                                             <Grid item xs={3} lg={2}>
                                                 <div className='pricePerItem'>
                                                     <span>
-                                                        <i className="fa fa-inr" aria-hidden="true"></i>
+                                                        <FontAwesomeIcon icon="fa-solid fa-indian-rupee-sign" />
                                                         <span
                                                             style={{ paddingLeft: "2px" }}>{item.price.toFixed(2)}</span>
                                                     </span>
@@ -392,7 +389,7 @@ class Details extends Component {
                                                             </Grid>
                                                             <Grid item xs={4} lg={3}>
                                                                 <span style={{ float: 'right' }}>
-                                                                    <i className="fa fa-inr" aria-hidden="true"></i>
+                                                                    <FontAwesomeIcon icon="fa-solid fa-indian-rupee-sign" />
                                                                     <span
                                                                         style={{ paddingLeft: "2px" }}>{item.priceForAll.toFixed(2)}</span>
                                                                 </span>
@@ -407,8 +404,9 @@ class Details extends Component {
                                             <Grid item xs={4} lg={3}>
                                                 <div style={{ marginTop: 15, marginBottom: 15 }}>
                                                     <span style={{ fontWeight: 'bold', float: 'right' }}>
-                                                        <i className="fa fa-inr" aria-hidden="true"
-                                                            style={{ paddingRight: "2px" }}></i>{this.state.totalAmount.toFixed(2)}
+                                                        <FontAwesomeIcon icon="fa-solid fa-indian-rupee-sign"
+                                                                         className="icon-01"/>
+                                                        {this.state.totalAmount.toFixed(2)}
                                                     </span>
                                                 </div>
                                             </Grid>

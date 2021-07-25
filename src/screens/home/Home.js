@@ -17,7 +17,7 @@ import { withStyles } from '@material-ui/core/styles';
 import './Home.css';
 
 import { Redirect } from 'react-router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
@@ -25,9 +25,6 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 
 // Add all icons to the library so you can use it in your page
 library.add(fas, far, fab)
-
-
-
 
 const styles = theme => ({
     restaurantsCard: {
@@ -191,13 +188,13 @@ class Home extends Component {
                                                         {/* restaurant rating */}
                                                         <div className="restaurant-rating-div">
                                                             <Typography variant='body1'>
-                                                                <FontAwesomeIcon icon="star" /> {restaurant.customer_rating} ({restaurant.number_customers_rated})
+                                                                <FontAwesomeIcon icon="fa-solid fa-star" /> {restaurant.customer_rating} ({restaurant.number_customers_rated})
                                                             </Typography>
                                                         </div>
                                                         {/* restaurant average price */}
                                                         <div className="restaurant-avg-price-div">
                                                             <Typography variant='body1'>
-                                                                <FontAwesomeIcon icon="rupee-sign" /> {restaurant.average_price} for two
+                                                               <FontAwesomeIcon icon="fa-solid fa-indian-rupee-sign"/> {restaurant.average_price} for two
                                                             </Typography>
                                                         </div>
                                                     </div>
