@@ -13,11 +13,21 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-import { Redirect } from 'react-router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
 //importing the css file of the Home page
 import './Home.css';
+
+import { Redirect } from 'react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+
+// Add all icons to the library so you can use it in your page
+library.add(fas, far, fab)
+
+
+
 
 const styles = theme => ({
     restaurantsCard: {
@@ -154,7 +164,10 @@ class Home extends Component {
                     <div>
                         <Header showSearchBox={true} searchHandler={this.searchHandler} baseUrl={this.props.baseUrl} />
                         {/* if no restaurants found with the entered name displays the No restaurant with the given name. */}
-                        {this.state.restaurants.length === 0 && this.state.loading === false ?
+                        {
+                            this.state.restaurants!==null?
+                                                    
+                        this.state.restaurants.length === 0 && this.state.loading === false ?
                             <Typography variant="h6">No restaurant with the given name.</Typography> :
                             <ImageList cols={this.state.cards} rowHeight="auto">
                                 {this.state.restaurants.map(restaurant => (
@@ -184,7 +197,7 @@ class Home extends Component {
                                                         {/* restaurant average price */}
                                                         <div className="restaurant-avg-price-div">
                                                             <Typography variant='body1'>
-                                                                <FontAwesomeIcon icon="inr" /> {restaurant.average_price} for two
+                                                                <FontAwesomeIcon icon="rupee-sign" /> {restaurant.average_price} for two
                                                             </Typography>
                                                         </div>
                                                     </div>
@@ -194,6 +207,8 @@ class Home extends Component {
                                     </ImageListItem>
                                 ))}
                             </ImageList>
+                            :
+                            <Typography variant="h6">No restaurant with the given name.</Typography>
                         }
                     </div>
                     : ""
