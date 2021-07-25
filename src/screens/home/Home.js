@@ -17,7 +17,7 @@ import { withStyles } from '@material-ui/core/styles';
 import './Home.css';
 
 import { Redirect } from 'react-router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
@@ -194,7 +194,7 @@ class Home extends Component {
                                                                 {/* restaurant average price */}
                                                                 <div className="restaurant-avg-price-div">
                                                                     <Typography variant='body1'>
-                                                                        <FontAwesomeIcon icon="rupee-sign" /> {restaurant.average_price} for two
+                                                                        <i className="fa fa-inr inr-style"></i> {restaurant.average_price} for two
                                                                     </Typography>
                                                                 </div>
                                                             </div>
