@@ -10,8 +10,8 @@ import StepContent from "@material-ui/core/StepContent";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import AppBar from "@material-ui/core/AppBar";
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
+import ImageList from '@material-ui/core/ImageList';
+import ImageListItem from '@material-ui/core/ImageListItem';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
@@ -365,41 +365,51 @@ class Checkout extends Component {
                                 </div>
                                 <div id='existing-address-display'
                                     className={this.state.activeTabValue === 'existing_address' ? 'display-block' : 'display-none'}>
-                                    {this.state.addresses === undefined || this.state.addresses.length === 0 ?
-                                        <Typography style={{ margin: 10, marginBottom: 200 }} color='textSecondary'
-                                            component='p'>
-                                            There are no saved addresses! You can save an address using the 'New
-                                            Address' tab or using your ‘Profile’ menu option.
-                                        </Typography> :
-                                        <GridList style={{ flexWrap: 'nowrap' }} cols={3} cellHeight='auto'>
-                                            {
-                                                (this.state.addresses || []).map((address, index) => (
-                                                    <GridListTile key={address.id}
-                                                        className={this.state.selectedAddressId === address.id ? 'grid-list-tile-selected-address' : null}>
-                                                        <div className='address-box'>
-                                                            <p>{address.flat_building_name}</p>
-                                                            <p>{address.locality}</p>
-                                                            <p>{address.city}</p>
-                                                            <p>{address.state.state_name}</p>
-                                                            <p>{address.pincode}</p>
-                                                        </div>
-                                                        <Grid container>
-                                                            <Grid item xs={6} lg={10}></Grid>
-                                                            <Grid item xs={2}>
-                                                                <IconButton
-                                                                    id={'select-address-button-' + address.id}
-                                                                    className='select-address-icon'
-                                                                    onClick={this.selectAddress}>
-                                                                    <CheckCircleIcon
-                                                                        id={'select-address-icon-' + address.id}
-                                                                        className={this.state.selectedAddressId === address.id ? 'display-green-icon' : 'display-grey-icon'} />
-                                                                </IconButton>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </GridListTile>
-                                                ))
-                                            }
-                                        </GridList>
+                                    {
+
+                                        this.state.addresses !== null ?
+
+                                            this.state.addresses === undefined || this.state.addresses.length === 0 ?
+                                                <Typography style={{ margin: 10, marginBottom: 200 }} color='textSecondary'
+                                                    component='p'>
+                                                    There are no saved addresses! You can save an address using the 'New
+                                                    Address' tab or using your ‘Profile’ menu option.
+                                                </Typography> :
+                                                <ImageList style={{ flexWrap: 'nowrap' }} cols={3} rowHeight="auto">
+                                                    {
+                                                        (this.state.addresses || []).map((address, index) => (
+                                                            <ImageListItem key={address.id}
+                                                                className={this.state.selectedAddressId === address.id ? 'grid-list-tile-selected-address' : null}>
+                                                                <div className='address-box'>
+                                                                    <p>{address.flat_building_name}</p>
+                                                                    <p>{address.locality}</p>
+                                                                    <p>{address.city}</p>
+                                                                    <p>{address.state.state_name}</p>
+                                                                    <p>{address.pincode}</p>
+                                                                </div>
+                                                                <Grid container>
+                                                                    <Grid item xs={6} lg={10}></Grid>
+                                                                    <Grid item xs={2}>
+                                                                        <IconButton
+                                                                            id={'select-address-button-' + address.id}
+                                                                            className='select-address-icon'
+                                                                            onClick={this.selectAddress}>
+                                                                            <CheckCircleIcon
+                                                                                id={'select-address-icon-' + address.id}
+                                                                                className={this.state.selectedAddressId === address.id ? 'display-green-icon' : 'display-grey-icon'} />
+                                                                        </IconButton>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </ImageListItem>
+                                                        ))
+                                                    }
+                                                </ImageList>
+                                            :
+                                            <Typography style={{ margin: 10, marginBottom: 200 }} color='textSecondary'
+                                                component='p'>
+                                                There are no saved addresses! You can save an address using the 'New
+                                                Address' tab or using your ‘Profile’ menu option.
+                                            </Typography>
                                     }
                                 </div>
                                 <div id='new-address-display'

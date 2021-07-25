@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 
+
 // Order Item Summary Section
 export default function OrderItems(props) {
     return (
@@ -31,7 +32,7 @@ export default function OrderItems(props) {
                     </Grid>
                     <Grid item xs={3}>
                         <Typography color='textSecondary'>
-                            <i className="fa fa-inr" aria-hidden="true"></i>
+                            <i className="fa fa-inr"></i>
                             {item.priceForAll.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </Typography>
                     </Grid>
@@ -48,7 +49,7 @@ export default function OrderItems(props) {
                 <Grid item xs={3}>
                     <div className='payable-bill-amount'>
                         <Typography color='textSecondary'>
-                            <i className="fa fa-inr" aria-hidden="true"></i>
+                            <i className="fa fa-inr"></i>
                         </Typography>
                         <Typography style={{ marginRight: 10 }} color='textPrimary'>
                             {Number(props.total).toLocaleString(undefined, { minimumFractionDigits: 2 })}
