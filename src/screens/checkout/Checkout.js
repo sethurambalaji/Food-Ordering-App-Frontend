@@ -365,7 +365,11 @@ class Checkout extends Component {
                                 </div>
                                 <div id='existing-address-display'
                                     className={this.state.activeTabValue === 'existing_address' ? 'display-block' : 'display-none'}>
-                                    {this.state.addresses === undefined || this.state.addresses.length === 0 ?
+                                    { 
+                                      
+                                      this.state.addresses!==null ?
+                                     
+                                     this.state.addresses === undefined || this.state.addresses.length === 0 ?
                                         <Typography style={{ margin: 10, marginBottom: 200 }} color='textSecondary'
                                             component='p'>
                                             There are no saved addresses! You can save an address using the 'New
@@ -400,6 +404,12 @@ class Checkout extends Component {
                                                 ))
                                             }
                                         </GridList>
+                                        :
+                                        <Typography style={{ margin: 10, marginBottom: 200 }} color='textSecondary'
+                                        component='p'>
+                                        There are no saved addresses! You can save an address using the 'New
+                                        Address' tab or using your ‘Profile’ menu option.
+                                    </Typography> 
                                     }
                                 </div>
                                 <div id='new-address-display'
